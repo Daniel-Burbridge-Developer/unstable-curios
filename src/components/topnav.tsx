@@ -14,7 +14,14 @@ import {
   NavigationMenuTrigger,
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
-import { SignedOut, SignedIn, SignInButton, UserButton } from "@clerk/nextjs";
+import {
+  SignedOut,
+  SignedIn,
+  SignInButton,
+  UserButton,
+  useUser,
+} from "@clerk/nextjs";
+import { Skeleton } from "./ui/skeleton";
 
 const components: { title: string; href: string; description: string }[] = [
   {
@@ -55,6 +62,7 @@ const components: { title: string; href: string; description: string }[] = [
 ];
 
 export default function TopNav() {
+  const { isLoaded } = useUser(); // Check if user data has loaded
   return (
     <NavigationMenu className="min-w-full">
       <div className="flex justify-between items-center min-w-full mx-auto p-4">
@@ -122,12 +130,18 @@ export default function TopNav() {
           </NavigationMenuList>
         </div>
         <div className="">
-          <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
+          {!isLoaded ? (
+            <Skeleton className="h-8 w-24 rounded-full" />
+          ) : (
+            <div>
+              <SignedOut>
+                <SignInButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButton />
+              </SignedIn>
+            </div>
+          )}
         </div>
       </div>
     </NavigationMenu>
