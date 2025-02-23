@@ -70,7 +70,7 @@ export default function TopNav() {
             {Array.isArray(user?.publicMetadata?.roles) &&
               user.publicMetadata.roles.includes("admin") && (
                 <NavigationMenuItem>
-                  <Link href="/" legacyBehavior passHref>
+                  <Link href="/admin" legacyBehavior passHref>
                     <NavigationMenuLink
                       className={navigationMenuTriggerStyle()}
                     >
