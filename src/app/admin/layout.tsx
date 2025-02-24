@@ -2,6 +2,10 @@
 import { redirect } from "next/navigation";
 import { currentUser } from "@clerk/nextjs/server";
 
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "@/app/admin/api/uploadthing/core";
+
 export default async function AdminLayout({
   children,
 }: {
@@ -20,5 +24,18 @@ export default async function AdminLayout({
     redirect("/404");
   }
 
-  return <div>{children}</div>;
+  return (
+    <div>
+      <NextSSRPlugin
+        /**
+         * The `extractRouterConfig` will extract **only** the route configs
+         * from the router to prevent additional information from being
+         * leaked to the client. The data passed to the client is the same
+         * as if you were to fetch `/api/uploadthing` directly.
+         */
+        routerConfig={extractRouterConfig(ourFileRouter)}
+      />
+      {children}
+    </div>
+  );
 }
