@@ -4,7 +4,7 @@ import { currentUser } from "@clerk/nextjs/server";
 
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
-import { ourFileRouter } from "@/app/admin/api/uploadthing/core";
+import { ourFileRouter } from "@/app/api/uploadthing/core";
 
 export default async function AdminLayout({
   children,
