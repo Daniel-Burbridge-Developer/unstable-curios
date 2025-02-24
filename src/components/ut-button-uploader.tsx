@@ -1,8 +1,10 @@
+"use client";
+
 import { UploadButton } from "@/utils/uploadthing";
 
-export const OurUploadDropzone = () => (
+export const OurUploadButton = () => (
   <UploadButton
-    endpoint="collection"
+    endpoint="imageUploader"
     onClientUploadComplete={(res) => {
       // Do something with the response
       console.log("Files: ", res);

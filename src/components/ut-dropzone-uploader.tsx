@@ -1,8 +1,10 @@
+"use client";
+
 import { UploadDropzone } from "@/utils/uploadthing";
 
 export const OurUploadDropzone = () => (
   <UploadDropzone
-    endpoint="collection"
+    endpoint="imageUploader"
     onClientUploadComplete={(res) => {
       // Do something with the response
       console.log("Files: ", res);
