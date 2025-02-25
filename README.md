@@ -147,21 +147,21 @@ This checklist outlines the tasks required to build the UnstableCurios applicati
 
 ### Setup & Configuration
 
-- [ ] **Initialize Next.js Project:**
-  - [ ] Create a new Next.js project using `create-next-app`.
-  - [ ] Choose TypeScript, Tailwind CSS, and other options as needed during setup.
-- [ ] **Set up TypeScript:**
-  - [ ] Ensure TypeScript is correctly configured in the project.
-  - [ ] Create a `tsconfig.json` file if one doesn't exist.
-- [ ] **Install and Configure Tailwind CSS:**
-  - [ ] Install Tailwind CSS and its dependencies.
-  - [ ] Configure Tailwind CSS in `tailwind.config.js`.
-  - [ ] Add Tailwind directives to your CSS file (e.g., `globals.css`).
-- [ ] **Install and Configure Clerk for Authentication:**
-  - [ ] Create a Clerk account and project.
-  - [ ] Install the Clerk SDK.
-  - [ ] Configure Clerk environment variables (publishable key, secret key, etc.).
-  - [ ] Set up Clerk components (e.g., `<ClerkProvider>`, `<SignedIn>`, `<SignedOut>`).
+- [x] **Initialize Next.js Project:**
+  - [x] Create a new Next.js project using `create-next-app`.
+  - [x] Choose TypeScript, Tailwind CSS, and other options as needed during setup.
+- [ X **Set up TypeScript:**
+  - [x] Ensure TypeScript is correctly configured in the project.
+  - [x] Create a `tsconfig.json` file if one doesn't exist.
+- [x] **Install and Configure Tailwind CSS:**
+  - [x] Install Tailwind CSS and its dependencies.
+  - [x] Configure Tailwind CSS in `tailwind.config.js`.
+  - [x] Add Tailwind directives to your CSS file (e.g., `globals.css`).
+- [x] **Install and Configure Clerk for Authentication:**
+  - [x] Create a Clerk account and project.
+  - [x] Install the Clerk SDK.
+  - [x] Configure Clerk environment variables (publishable key, secret key, etc.).
+  - [x] Set up Clerk components (e.g., `<ClerkProvider>`, `<SignedIn>`, `<SignedOut>`).
 - [ ] **Install and Configure Drizzle ORM:**
   - [ ] Install Drizzle ORM and its dependencies (`drizzle-orm`, `@neondatabase/serverless`).
   - [ ] Set up the database connection (PostgreSQL on Vercel).
@@ -174,7 +174,7 @@ This checklist outlines the tasks required to build the UnstableCurios applicati
 - [ ] **Install and Configure Uploadthing for Image Storage:**
   - [ ] Create an Uploadthing account and project.
   - [ ] Install the Uploadthing SDK.
-  - [ ] Configure Uploadthing environment variables (API key, secret key).
+  - [x] Configure Uploadthing environment variables (API key, secret key).
   - [ ] Set up Uploadthing routes for image uploads.
 
 ### Database Schema & Models
