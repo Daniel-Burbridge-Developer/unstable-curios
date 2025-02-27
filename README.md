@@ -4,10 +4,10 @@
 
 UnstableCurios is a web application where users can:
 
-- **Collect Cards:** Each user has a personal collection of cards.
-- **Manage Friendships:** Users can add friends and view their friends' card collections.
-- **Request Trades:** Users can send and receive trade requests to exchange cards.
-- **Cards belong to Collections, which belong to Organizations.**
+- **Collect Things:** Each user has a personal collection of things.
+- **Manage Friendships:** Users can add friends and view their friends' collections.
+- **Request Trades:** Users can send and receive trade requests to exchange things.
+- ** belong to Collections, which belong to Organizations.**
 
 ## 2. Tech Stack
 
@@ -150,7 +150,7 @@ This checklist outlines the tasks required to build the UnstableCurios applicati
 - [x] **Initialize Next.js Project:**
   - [x] Create a new Next.js project using `create-next-app`.
   - [x] Choose TypeScript, Tailwind CSS, and other options as needed during setup.
-- [ X **Set up TypeScript:**
+- [x] **Set up TypeScript:**
   - [x] Ensure TypeScript is correctly configured in the project.
   - [x] Create a `tsconfig.json` file if one doesn't exist.
 - [x] **Install and Configure Tailwind CSS:**
