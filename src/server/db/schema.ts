@@ -6,6 +6,27 @@ export const users = pgTable('users', {
   username: varchar('phone', { length: 256 }),
 });
 
+export const organizations = pgTable('organizations', {
+  id: serial('id').primaryKey(),
+  name: varchar('name', { length: 256 }),
+  description: text('description'),
+});
+
+export const collections = pgTable('collections', {
+  id: serial('id').primaryKey(),
+  organizationId: text('organization_id'),
+  name: varchar('name', { length: 256 }),
+  description: text('description'),
+});
+
+export const items = pgTable('items', {
+  id: serial('id').primaryKey(),
+  collectionId: text('collection_id'),
+  name: varchar('name', { length: 256 }),
+  description: text('description'),
+  imageUrl: text('image_url'),
+});
+
 // #### User
 
 // - `id` (UUID, Primary Key)
@@ -32,7 +53,7 @@ export const users = pgTable('users', {
 // - `createdAt` (Timestamp)
 // - `updatedAt` (Timestamp)
 
-// #### Card
+// #### Item
 
 // - `id` (UUID, Primary Key)
 // - `collectionId` (UUID, Foreign Key referencing Collection.id)
@@ -42,7 +63,7 @@ export const users = pgTable('users', {
 // - `createdAt` (Timestamp)
 // - `updatedAt` (Timestamp)
 
-// #### UserCard (Linking Users and Cards)
+// #### UserItem (Linking Users and Cards)
 
 // - `id` (UUID, Primary Key)
 // - `userId` (UUID, Foreign Key referencing User.id)
