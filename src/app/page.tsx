@@ -1,32 +1,32 @@
-"use client";
-import { UTUploadButton } from "@/components/ut-button-uploader";
-import { UTUploadDropzone } from "@/components/ut-dropzone-uploader";
-import Image from "next/image";
-import { createUser } from "@/server/db/queries";
-import { useState } from "react";
+'use client';
+import { UTUploadButton } from '@/components/ut-button-uploader';
+import { UTUploadDropzone } from '@/components/ut-dropzone-uploader';
+import Image from 'next/image';
+import { createUser } from '@/server/db/queries';
+import { useState } from 'react';
 
 export default function Home() {
-  const [username, setUsername] = useState("");
+  const [username, setUsername] = useState('');
   const [result, setResult] = useState<
     { id: number; username: string; createdAt: Date; updatedAt: Date | null }[]
   >([]);
 
   const companies = [
-    { name: "Woolworths", imageURL: "/placeholder.webp" },
-    { name: "Coles", imageURL: "/placeholder.webp" },
+    { name: 'Woolworths', imageURL: '/placeholder.webp' },
+    { name: 'Coles', imageURL: '/placeholder.webp' },
   ];
 
   async function handleCreateUser() {
-    setUsername("test");
+    await setUsername('user-' + Math.random().toString(36).substring(7));
     const inserted = await createUser(username);
     setResult(inserted);
   }
   return (
-    <div className="flex min-w-full min-h-svh flex-col gap-4 justify-center items-center bg-slate-800">
+    <div className='flex min-w-full min-h-svh flex-col gap-4 justify-center items-center bg-slate-800'>
       {companies.map((company) => (
-        <div key={company.name} className="flex items-center justify-center">
+        <div key={company.name} className='flex items-center justify-center'>
           <Image
-            src={company.imageURL ?? "/placeholder.webp"}
+            src={company.imageURL ?? '/placeholder.webp'}
             alt={company.name}
             width={200}
             height={200}
