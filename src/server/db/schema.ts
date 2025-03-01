@@ -16,10 +16,11 @@ import {
  */
 export const createTable = pgTableCreator((name) => `unstable_curios_${name}`);
 
-export const organization = createTable("organization", {
+export const organisation = createTable("organisation", {
   id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
   name: varchar("name", { length: 256 }).notNull(),
   description: varchar("description", { length: 1024 }),
+  imageURL: varchar("image_url", { length: 1024 }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -30,9 +31,10 @@ export const organization = createTable("organization", {
 
 export const collection = createTable("collection", {
   id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-  organizationId: integer("organization_id").references(() => organization.id),
+  organisationId: integer("organisation_id").references(() => organisation.id),
   name: varchar("name", { length: 256 }).notNull(),
   description: varchar("description", { length: 1024 }),
+  imageURL: varchar("image_url", { length: 1024 }),
   createdAt: timestamp("created_at", { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -75,7 +77,7 @@ export const user = createTable("user", {
 // - `createdAt` (Timestamp)
 // - `updatedAt` (Timestamp)
 
-// #### Organization
+// #### organisation
 
 // - `id` (UUID, Primary Key)
 // - `name` (String)
@@ -86,7 +88,7 @@ export const user = createTable("user", {
 // #### Collection
 
 // - `id` (UUID, Primary Key)
-// - `organizationId` (UUID, Foreign Key referencing Organization.id)
+// - `organisationId` (UUID, Foreign Key referencing organisation.id)
 // - `name` (String)
 // - `description` (Text, Optional)
 // - `createdAt` (Timestamp)
