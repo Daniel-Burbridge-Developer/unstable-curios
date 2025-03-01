@@ -2,7 +2,7 @@
 
 import { UTUploadDropzone } from "@/components/ut-dropzone-uploader";
 import Image from "next/image";
-import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 const AdminPage = () => {
   return (
