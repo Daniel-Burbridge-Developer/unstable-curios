@@ -22,7 +22,7 @@ const formSchema = z.object({
   }),
 });
 
-export function ProfileForm() {
+export function AdminCreationForm() {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -62,3 +62,5 @@ export function ProfileForm() {
     </Form>
   );
 }
+
+export default AdminCreationForm;
