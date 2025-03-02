@@ -16,12 +16,12 @@ export const UTUploadDropzone = ({
       toast.success("Upload complete!");
       uploadCompleted?.();
 
-      // for (const file of res) {
-      //   toast.success(`Uploaded: ${file.name}`);
-      // }
+      for (const file of res) {
+        console.log(`Uploaded: ${file.name}`);
+      }
     }}
     onUploadError={(error: Error) => {
-      alert(`ERROR! ${error.message}`);
+      toast.error(`ERROR! ${error.message}`);
     }}
     onUploadBegin={(name) => {
       // Do something once upload begins
