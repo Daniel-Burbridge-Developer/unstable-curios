@@ -3,43 +3,72 @@ import { createStore } from 'zustand/vanilla';
 
 // Slices
 
-export type UploadSlice = {
-  selectedImages: File[];
-  addImage: (file: File) => void;
-  removeImage: (index: number) => void;
-};
+// export type UploadStateSlice = {
+//   selectedImages: File[];
+// };
 
-export type FriendsSlice = {
-  friendList: string[];
-  addFriend: (friend: string) => void;
-  removeFriend: (friend: string) => void;
-};
+// export type UploadActionsSlice = {
+//   addImage: (file: File) => void;
+//   removeImage: (index: number) => void;
+// };
+
+// export type FriendsStateSlice = {
+//   friendList: string[];
+// };
+
+// export type FriendsActionsSlice = {
+//   addFriend: (friend: string) => void;
+//   removeFriend: (friend: string) => void;
+// };
 
 // End of Slices
 
-export type AppState = {
-  count: number;
+// TEST SLICES
+
+export type UploadStateSlice = {
+  fileCount: number;
 };
 
-export type AppActions = {
-  decrementCount: () => void;
-  incrementCount: () => void;
+export type UploadActionsSlice = {
+  fileDecrementCount: () => void;
+  fileIncrementCount: () => void;
 };
+
+export type FriendsStateSlice = {
+  friendCount: number;
+};
+
+export type FriendsActionsSlice = {
+  friendDecrementCount: () => void;
+  friendIncrementCount: () => void;
+};
+
+// END OF TEST SLICES
+
+export type AppState = UploadStateSlice & FriendsStateSlice;
+export type AppActions = FriendsActionsSlice & UploadActionsSlice;
 
 export type AppStore = AppState & AppActions;
 
 export const initAppStore = (): AppState => {
-  return { count: new Date().getFullYear() };
+  return { fileCount: new Date().getFullYear(), friendCount: 0 };
 };
 
 export const defaultInitState: AppState = {
-  count: 0,
+  fileCount: 0,
+  friendCount: 0,
 };
 
 export const createAppStore = (initState: AppState = defaultInitState) => {
   return createStore<AppStore>()((set) => ({
     ...initState,
-    decrementCount: () => set((state) => ({ count: state.count - 1 })),
-    incrementCount: () => set((state) => ({ count: state.count + 1 })),
+    fileDecrementCount: () =>
+      set((state) => ({ fileCount: state.fileCount - 1 })),
+    fileIncrementCount: () =>
+      set((state) => ({ fileCount: state.fileCount + 1 })),
+    friendDecrementCount: () =>
+      set((state) => ({ friendCount: state.friendCount - 1 })),
+    friendIncrementCount: () =>
+      set((state) => ({ friendCount: state.friendCount + 1 })),
   }));
 };

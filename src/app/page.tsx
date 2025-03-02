@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { createUser } from '@/server/db/queries';
 import { useState, useEffect } from 'react';
 import { getImages } from '@/server/db/queries';
-import { CounterStore } from '@/stores/app-store';
+import { useAppStore } from './providers/app-store-provider';
 
 export default function Home() {
   const [username, setUsername] = useState('');
@@ -22,6 +22,15 @@ export default function Home() {
       updatedAt: Date | null;
     }[]
   >();
+
+  const {
+    fileCount,
+    fileIncrementCount,
+    fileDecrementCount,
+    friendCount,
+    friendDecrementCount,
+    friendIncrementCount,
+  } = useAppStore((state) => state);
 
   async function fetchImages() {
     const fetchedImages = await getImages();
@@ -44,6 +53,28 @@ export default function Home() {
   }
   return (
     <div className='flex min-w-full min-h-svh flex-col gap-4 justify-center items-center bg-slate-800'>
+      <div>
+        <div>
+          FILECount: {fileCount}
+          <hr />
+          <button type='button' onClick={fileIncrementCount}>
+            Increment Count
+          </button>
+          <button type='button' onClick={fileDecrementCount}>
+            Decrement Count
+          </button>
+        </div>
+        <div>
+          FRIENDCount: {friendCount}
+          <hr />
+          <button type='button' onClick={friendIncrementCount}>
+            Increment Count
+          </button>
+          <button type='button' onClick={friendDecrementCount}>
+            Decrement Count
+          </button>
+        </div>
+      </div>
       {companies.map((company) => (
         <div key={company.name} className='flex items-center justify-center'>
           <Image
