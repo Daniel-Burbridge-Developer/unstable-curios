@@ -39,3 +39,8 @@ export async function createImage({
   const insertedImage = await db.insert(schema.image).values(image).returning();
   return insertedImage;
 }
+
+export async function getImages() {
+  const images = await db.select().from(schema.image).execute();
+  return images;
+}

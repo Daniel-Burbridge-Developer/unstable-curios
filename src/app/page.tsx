@@ -3,13 +3,33 @@ import { UTUploadButton } from "@/components/ut-button-uploader";
 import { UTUploadDropzone } from "@/components/ut-dropzone-uploader";
 import Image from "next/image";
 import { createUser } from "@/server/db/queries";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getImages } from "@/server/db/queries";
 
 export default function Home() {
   const [username, setUsername] = useState("");
   const [result, setResult] = useState<
     { id: number; username: string; createdAt: Date; updatedAt: Date | null }[]
   >([]);
+
+  const [images, setImages] = useState<
+    {
+      id: number;
+      url: string;
+      status: string;
+      createdAt: Date;
+      updatedAt: Date | null;
+    }[]
+  >();
+
+  async function fetchImages() {
+    const fetchedImages = await getImages();
+    setImages(fetchedImages);
+  }
+
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
   const companies = [
     { name: "Woolworths", imageURL: "/placeholder.webp" },
@@ -33,11 +53,19 @@ export default function Home() {
           />
         </div>
       ))}
-      <UTUploadDropzone />
+      <UTUploadDropzone uploadCompleted={fetchImages} />
       <UTUploadButton />
       <div>
         <button onClick={handleCreateUser}>Create User</button>
         {result && <pre>{JSON.stringify(result, null, 2)}</pre>}
+      </div>
+      <div>
+        {images?.map((image) => (
+          <div key={image.id}>
+            <img src={image.url} width={200} height={200} />
+            <p>{image.status}</p>
+          </div>
+        ))}
       </div>
     </div>
   );
