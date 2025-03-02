@@ -1,8 +1,8 @@
 // src/actions/userActions.ts
-'use server';
+"use server";
 
-import { db } from './db';
-import * as schema from './schema';
+import { db } from "./db";
+import * as schema from "./schema";
 
 // Function to create a new user
 export async function createUser(username: string) {
@@ -31,7 +31,11 @@ export async function createOrganisation(organisation) {
   return insertedOrganisation;
 }
 
-export async function createImage(image) {
+export async function createImage({
+  image,
+}: {
+  image: { name: string; url: string; status: string };
+}) {
   const insertedImage = await db.insert(schema.image).values(image).returning();
   return insertedImage;
 }
