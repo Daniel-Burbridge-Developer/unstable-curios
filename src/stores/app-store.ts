@@ -1,6 +1,22 @@
 // src/stores/App-store.ts
 import { createStore } from 'zustand/vanilla';
 
+// Slices
+
+export type UploadSlice = {
+  selectedImages: File[];
+  addImage: (file: File) => void;
+  removeImage: (index: number) => void;
+};
+
+export type FriendsSlice = {
+  friendList: string[];
+  addFriend: (friend: string) => void;
+  removeFriend: (friend: string) => void;
+};
+
+// End of Slices
+
 export type AppState = {
   count: number;
 };

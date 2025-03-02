@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 
+import { AppStoreProvider } from '@/app/providers/app-store-provider';
 import { ClerkProvider } from '@clerk/nextjs';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Providers } from '@/app/providers/tanstack-query-provider';
@@ -41,9 +42,11 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Providers>
-              <TopNav />
-              {children}
-              <Toaster richColors />
+              <AppStoreProvider>
+                <TopNav />
+                {children}
+                <Toaster richColors />
+              </AppStoreProvider>
             </Providers>
           </ThemeProvider>
         </body>
