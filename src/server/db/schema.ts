@@ -47,6 +47,7 @@ export const item = createTable("item", {
   id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
   collectionId: integer("collection_id").references(() => collection.id),
   name: varchar("name", { length: 256 }).notNull(),
+  setNumber: integer("set_number"),
   description: varchar("description", { length: 1024 }),
   imageUrl: varchar("image_url", { length: 1024 }),
   createdAt: timestamp("created_at", { withTimezone: true })
