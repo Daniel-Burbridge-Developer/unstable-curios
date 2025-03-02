@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { UploadDropzone } from "@/utils/uploadthing";
-import { toast } from "sonner";
+import { UploadDropzone } from '@/utils/uploadthing';
+import { toast } from 'sonner';
 
 export const UTUploadDropzone = ({
   uploadCompleted,
@@ -9,11 +9,11 @@ export const UTUploadDropzone = ({
   uploadCompleted?: () => void;
 }) => (
   <UploadDropzone
-    endpoint="imageUploader"
+    endpoint='imageUploader'
     onClientUploadComplete={(res) => {
       // Do something with the response
-      console.log("Files: ", res);
-      toast.success("Upload complete!");
+      console.log('Files: ', res);
+      toast.success('Upload complete!');
       uploadCompleted?.();
 
       for (const file of res) {
@@ -25,7 +25,7 @@ export const UTUploadDropzone = ({
     }}
     onUploadBegin={(name) => {
       // Do something once upload begins
-      console.log("Uploading: ", name);
+      console.log('Uploading: ', name);
     }}
   />
 );

@@ -1,8 +1,8 @@
 // src/actions/userActions.ts
-"use server";
+'use server';
 
-import { db } from "./db";
-import * as schema from "./schema";
+import { db } from './db';
+import * as schema from './schema';
 
 // Function to create a new user
 export async function createUser(username: string) {
