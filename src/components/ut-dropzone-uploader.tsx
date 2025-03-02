@@ -1,6 +1,7 @@
 'use client';
 
 import { UploadDropzone } from '@/utils/uploadthing';
+import { toast } from 'sonner';
 
 export const UTUploadDropzone = () => (
   <UploadDropzone
@@ -8,7 +9,7 @@ export const UTUploadDropzone = () => (
     onClientUploadComplete={(res) => {
       // Do something with the response
       console.log('Files: ', res);
-      alert('Upload Completed');
+      toast.success('Upload complete!');
     }}
     onUploadError={(error: Error) => {
       alert(`ERROR! ${error.message}`);

@@ -1,4 +1,4 @@
-import { sql } from "drizzle-orm";
+import { sql } from 'drizzle-orm';
 import {
   index,
   integer,
@@ -6,7 +6,8 @@ import {
   pgTableCreator,
   timestamp,
   varchar,
-} from "drizzle-orm/pg-core";
+} from 'drizzle-orm/pg-core';
+import { getPreviouslyCachedImageOrNull } from 'next/dist/server/image-optimizer';
 
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
@@ -16,55 +17,67 @@ import {
  */
 export const createTable = pgTableCreator((name) => `unstable_curios_${name}`);
 
-export const organisation = createTable("organisation", {
-  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-  name: varchar("name", { length: 256 }).notNull(),
-  description: varchar("description", { length: 1024 }),
-  imageURL: varchar("image_url", { length: 1024 }),
-  createdAt: timestamp("created_at", { withTimezone: true })
+export const organisation = createTable('organisation', {
+  id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
+  name: varchar('name', { length: 256 }).notNull(),
+  description: varchar('description', { length: 1024 }),
+  imageURL: varchar('image_url', { length: 1024 }),
+  createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+  updatedAt: timestamp('updated_at', { withTimezone: true }).$onUpdate(
     () => new Date()
   ),
 });
 
-export const collection = createTable("collection", {
-  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-  organisationId: integer("organisation_id").references(() => organisation.id),
-  name: varchar("name", { length: 256 }).notNull(),
-  description: varchar("description", { length: 1024 }),
-  imageURL: varchar("image_url", { length: 1024 }),
-  createdAt: timestamp("created_at", { withTimezone: true })
+export const collection = createTable('collection', {
+  id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
+  organisationId: integer('organisation_id').references(() => organisation.id),
+  name: varchar('name', { length: 256 }).notNull(),
+  description: varchar('description', { length: 1024 }),
+  imageURL: varchar('image_url', { length: 1024 }),
+  createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+  updatedAt: timestamp('updated_at', { withTimezone: true }).$onUpdate(
     () => new Date()
   ),
 });
 
-export const item = createTable("item", {
-  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-  collectionId: integer("collection_id").references(() => collection.id),
-  name: varchar("name", { length: 256 }).notNull(),
-  setNumber: integer("set_number"),
-  description: varchar("description", { length: 1024 }),
-  imageUrl: varchar("image_url", { length: 1024 }),
-  createdAt: timestamp("created_at", { withTimezone: true })
+export const item = createTable('item', {
+  id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
+  collectionId: integer('collection_id').references(() => collection.id),
+  name: varchar('name', { length: 256 }).notNull(),
+  setNumber: integer('set_number'),
+  description: varchar('description', { length: 1024 }),
+  imageUrl: varchar('image_url', { length: 1024 }),
+  createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+  updatedAt: timestamp('updated_at', { withTimezone: true }).$onUpdate(
     () => new Date()
   ),
 });
 
-export const user = createTable("user", {
-  id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-  username: varchar("username", { length: 256 }).unique().notNull(),
-  createdAt: timestamp("created_at", { withTimezone: true })
+export const user = createTable('user', {
+  id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
+  username: varchar('username', { length: 256 }).unique().notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
-  updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
+  updatedAt: timestamp('updated_at', { withTimezone: true }).$onUpdate(
+    () => new Date()
+  ),
+});
+
+export const image = createTable('image', {
+  id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
+  url: varchar('url', { length: 1024 }).notNull(),
+  status: varchar('status', { length: 256 }).notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).$onUpdate(
     () => new Date()
   ),
 });
