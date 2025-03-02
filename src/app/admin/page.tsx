@@ -9,7 +9,12 @@ const AdminPage = () => {
   return (
     <div className="flex min-w-full min-h-svh flex-col gap-4 justify-center items-center bg-slate-800">
       <div>Admin Controls</div>
-      <ItemCreationForm />
+      <div>
+        <UTUploadDropzone />
+      </div>
+      <div>
+        <ItemCreationForm />
+      </div>
     </div>
   );
 };

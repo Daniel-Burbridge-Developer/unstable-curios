@@ -18,12 +18,17 @@ import { Input } from "@/components/ui/input";
 import { item } from "@/server/db/schema";
 
 const formSchema = z.object({
-  itemName: z.string().min(2, {
-    message: "Item name must be at least 2 characters.",
-  }),
+  itemName: z
+    .string()
+    .min(2, {
+      message: "Item name must be at least 2 characters.",
+    })
+    .max(256, {
+      message: "Item name must be at most 256 characters.",
+    }),
   itemSetNumber: z.preprocess(
     (val) => Number(val),
-    z.number().min(0, { message: "Age must be non-negative" })
+    z.number().min(0, { message: "Set Number must be non-negative" })
   ),
   itemDescription: z.string().min(2, {
     message: "Item description must be at least 2 characters.",
