@@ -21,9 +21,10 @@ const formSchema = z.object({
   itemName: z.string().min(2, {
     message: "Item name must be at least 2 characters.",
   }),
-  itemSetNumber: z.number().int().positive({
-    message: "Item set number must be a positive integer.",
-  }),
+  itemSetNumber: z.preprocess(
+    (val) => Number(val),
+    z.number().min(0, { message: "Age must be non-negative" })
+  ),
   itemDescription: z.string().min(2, {
     message: "Item description must be at least 2 characters.",
   }),
@@ -42,7 +43,8 @@ export function ItemCreationForm() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       itemName: "",
-      itemSetNumber: 0,
+      // @ts-ignore
+      itemSetNumber: "",
       itemDescription: "",
       itemImageUrl: "",
       collectionName: "",
@@ -80,7 +82,7 @@ export function ItemCreationForm() {
             <FormItem>
               <FormLabel>Item Set Number</FormLabel>
               <FormControl>
-                <Input placeholder="00" {...field} />
+                <Input type="number" placeholder="0" {...field} />
               </FormControl>
               <FormDescription>This is the items set number</FormDescription>
               <FormMessage />
