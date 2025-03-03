@@ -15,7 +15,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { createOrganisation } from '@/server/db/queries';
+import { createOrganisation, updateImage } from '@/server/db/queries';
 import { toast } from 'sonner';
 
 const formSchema = z.object({
@@ -36,9 +36,9 @@ const formSchema = z.object({
 });
 
 export function OrganisationCreationForm({
-  selectedImageUrl = '',
+  selectedImage = { id: 0, url: '' },
 }: {
-  selectedImageUrl: string;
+  selectedImage: { id: number; url: string };
 }) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -46,16 +46,16 @@ export function OrganisationCreationForm({
     defaultValues: {
       organisationName: '',
       organisationDescription: '',
-      organisationImageUrl: selectedImageUrl,
+      organisationImageUrl: selectedImage.url,
     },
   });
 
   // Update itemImageUrl when selectedImageUrl prop changes
   useEffect(() => {
-    if (selectedImageUrl) {
-      form.setValue('organisationImageUrl', selectedImageUrl);
+    if (selectedImage.url) {
+      form.setValue('organisationImageUrl', selectedImage.url);
     }
-  }, [selectedImageUrl, form]);
+  }, [selectedImage.url, form]);
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
@@ -66,6 +66,10 @@ export function OrganisationCreationForm({
     } catch {
       toast.error('Organisation not created');
     }
+
+    try {
+      updateImage(selectedImage.id);
+    } catch {}
   }
 
   return (

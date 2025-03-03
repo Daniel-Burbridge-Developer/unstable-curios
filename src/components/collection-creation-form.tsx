@@ -38,9 +38,9 @@ const formSchema = z.object({
 });
 
 export function CollectionCreationForm({
-  selectedImageUrl = '',
+  selectedImage = { id: 0, url: '' },
 }: {
-  selectedImageUrl: string;
+  selectedImage: { id: number; url: string };
 }) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -48,17 +48,17 @@ export function CollectionCreationForm({
     defaultValues: {
       collectionName: '',
       collectionDescription: '',
-      collectionImageUrl: selectedImageUrl,
+      collectionImageUrl: selectedImage.url,
       organizationName: '',
     },
   });
 
   // Update collectionImageUrl when selectedImageUrl prop changes
   useEffect(() => {
-    if (selectedImageUrl) {
-      form.setValue('collectionImageUrl', selectedImageUrl);
+    if (selectedImage.url) {
+      form.setValue('collectionImageUrl', selectedImage.url);
     }
-  }, [selectedImageUrl, form]);
+  }, [selectedImage.url, form]);
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {

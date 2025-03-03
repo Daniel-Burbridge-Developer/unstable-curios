@@ -58,13 +58,13 @@ const AdminDashboard = () => {
           </div>
           <div className='bg-slate-900 my-2 p-2'>
             {formType == 'item' && (
-              <ItemCreationForm selectedImageUrl={selectedImage.url} />
+              <ItemCreationForm selectedImage={selectedImage} />
             )}
             {formType == 'collection' && (
-              <CollectionCreationForm selectedImageUrl={selectedImage.url} />
+              <CollectionCreationForm selectedImage={selectedImage} />
             )}
             {formType == 'organization' && (
-              <OrganizationCreationForm selectedImageUrl={selectedImage.url} />
+              <OrganizationCreationForm selectedImage={selectedImage} />
             )}
           </div>
         </div>

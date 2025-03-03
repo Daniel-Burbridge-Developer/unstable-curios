@@ -42,9 +42,9 @@ const formSchema = z.object({
 });
 
 export function ItemCreationForm({
-  selectedImageUrl = '',
+  selectedImage = { id: 0, url: '' },
 }: {
-  selectedImageUrl: string;
+  selectedImage: { id: number; url: string };
 }) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -54,17 +54,17 @@ export function ItemCreationForm({
       // @ts-expect-error This is being pre-processed into an int
       itemSetNumber: '',
       itemDescription: '',
-      itemImageUrl: selectedImageUrl,
+      itemImageUrl: selectedImage.url,
       collectionName: '',
     },
   });
 
   // Update itemImageUrl when selectedImageUrl prop changes
   useEffect(() => {
-    if (selectedImageUrl) {
-      form.setValue('itemImageUrl', selectedImageUrl);
+    if (selectedImage.url) {
+      form.setValue('itemImageUrl', selectedImage.url);
     }
-  }, [selectedImageUrl, form]);
+  }, [selectedImage.url, form]);
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
