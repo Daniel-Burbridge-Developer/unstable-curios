@@ -15,25 +15,27 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
+import { createOrganisation } from '@/server/db/queries';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
-  organizationName: z
+  organisationName: z
     .string()
     .min(2, {
-      message: 'organization name must be at least 2 characters.',
+      message: 'organisation name must be at least 2 characters.',
     })
     .max(256, {
-      message: 'organization name must be at most 256 characters.',
+      message: 'organisation name must be at most 256 characters.',
     }),
-  organizationDescription: z.string().min(2, {
-    message: 'Organization description must be at least 2 characters.',
+  organisationDescription: z.string().min(2, {
+    message: 'organisation description must be at least 2 characters.',
   }),
-  organizationImageUrl: z.string().url({
-    message: 'Organization image URL must be a valid URL.',
+  organisationImageUrl: z.string().min(2, {
+    message: 'organisation image URL must be a valid URL.',
   }),
 });
 
-export function OrganizationCreationForm({
+export function OrganisationCreationForm({
   selectedImageUrl = '',
 }: {
   selectedImageUrl: string;
@@ -42,24 +44,28 @@ export function OrganizationCreationForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      organizationName: '',
-      organizationDescription: '',
-      organizationImageUrl: selectedImageUrl,
+      organisationName: '',
+      organisationDescription: '',
+      organisationImageUrl: selectedImageUrl,
     },
   });
 
   // Update itemImageUrl when selectedImageUrl prop changes
   useEffect(() => {
     if (selectedImageUrl) {
-      form.setValue('organizationImageUrl', selectedImageUrl);
+      form.setValue('organisationImageUrl', selectedImageUrl);
     }
   }, [selectedImageUrl, form]);
 
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values);
+    try {
+      createOrganisation({ organisation: values });
+      toast.success('Organisation Created');
+    } catch {
+      toast.error('Organisation not created');
+    }
   }
 
   return (
@@ -67,10 +73,10 @@ export function OrganizationCreationForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
         <FormField
           control={form.control}
-          name='organizationName'
+          name='organisationName'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Organization Name</FormLabel>
+              <FormLabel>Organisation Name</FormLabel>
               <FormControl>
                 <Input placeholder='Name' {...field} />
               </FormControl>
@@ -80,10 +86,10 @@ export function OrganizationCreationForm({
         />
         <FormField
           control={form.control}
-          name='organizationDescription'
+          name='organisationDescription'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Organization Description</FormLabel>
+              <FormLabel>Organisation Description</FormLabel>
               <FormControl>
                 <Input placeholder='Description' {...field} />
               </FormControl>
@@ -93,10 +99,10 @@ export function OrganizationCreationForm({
         />
         <FormField
           control={form.control}
-          name='organizationImageUrl'
+          name='organisationImageUrl'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Organization Image URL</FormLabel>
+              <FormLabel>Organisation Image URL</FormLabel>
               <FormControl>
                 <Input placeholder='Select an Image' {...field} />
               </FormControl>
@@ -104,10 +110,10 @@ export function OrganizationCreationForm({
             </FormItem>
           )}
         />
-        <Button type='submit'>Create Organization</Button>
+        <Button type='submit'>Create organisation</Button>
       </form>
     </Form>
   );
 }
 
-export default OrganizationCreationForm;
+export default OrganisationCreationForm;

@@ -28,7 +28,7 @@ const formSchema = z.object({
   collectionDescription: z.string().min(2, {
     message: 'collection description must be at least 2 characters.',
   }),
-  collectionImageUrl: z.string().url({
+  collectionImageUrl: z.string().min(2, {
     message: 'collection image URL must be a valid URL.',
   }),
   // Collection should be a dropdown from collection list pulled from DB

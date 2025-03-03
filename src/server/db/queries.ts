@@ -22,10 +22,23 @@ export async function getOrganisations() {
   return organisations;
 }
 
-export async function createOrganisation(organisation) {
+export async function createOrganisation({
+  organisation,
+}: {
+  organisation: {
+    organisationName: string;
+    organisationDescription: string;
+    organisationImageUrl: string;
+  };
+}) {
+  const inputValue = {
+    name: organisation.organisationName,
+    description: organisation.organisationDescription,
+    organisationImageUrl: organisation.organisationImageUrl,
+  };
   const insertedOrganisation = await db
     .insert(schema.organisation)
-    .values(organisation)
+    .values(inputValue)
     .returning();
 
   return insertedOrganisation;
