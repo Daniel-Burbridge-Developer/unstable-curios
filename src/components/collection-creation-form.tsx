@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -41,7 +42,7 @@ const formSchema = z.object({
   }),
 });
 
-export function ItemCreationForm({
+export function CollectionCreationForm({
   selectedImageUrl = '',
 }: {
   selectedImageUrl: string;
@@ -157,4 +158,4 @@ export function ItemCreationForm({
   );
 }
 
-export default ItemCreationForm;
+export default CollectionCreationForm;

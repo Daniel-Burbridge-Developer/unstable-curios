@@ -5,6 +5,9 @@ import { getImages } from '@/server/db/queries';
 import { UTUploadDropzone } from './ut-dropzone-uploader';
 import ItemCreationForm from './item-creation-form';
 import { Button } from './ui/button';
+import { number } from 'zod';
+import CollectionCreationForm from './collection-creation-form';
+import OrganizationCreationForm from './organization-creation-form';
 
 const AdminDashboard = () => {
   const [images, setImages] = useState<
@@ -16,11 +19,20 @@ const AdminDashboard = () => {
       updatedAt: Date | null;
     }[]
   >();
+  const [selectedImage, setSelectedImage] = useState({
+    id: 0,
+    url: '',
+  });
+  const [formType, setFormType] = useState('');
 
   async function fetchImages() {
     const fetchedImages = await getImages();
     setImages(fetchedImages);
   }
+
+  const handleImageSelection = (id: number, url: string) => {
+    setSelectedImage({ id: id, url: url });
+  };
 
   useEffect(() => {
     fetchImages();
@@ -37,12 +49,24 @@ const AdminDashboard = () => {
             <UTUploadDropzone uploadCompleted={fetchImages} />
           </div>
           <div className='m-4 gap-4 flex flex-col'>
-            <Button>Create Item</Button>
-            <Button>Create Collection</Button>
-            <Button>Create Organization</Button>
+            <Button onClick={() => setFormType('item')}>Create Item</Button>
+            <Button onClick={() => setFormType('collection')}>
+              Create Collection
+            </Button>
+            <Button onClick={() => setFormType('organization')}>
+              Create Organization
+            </Button>
           </div>
           <div className='bg-slate-900 my-2 p-2'>
-            <ItemCreationForm />
+            {formType == 'item' && (
+              <ItemCreationForm selectedImageUrl={selectedImage.url} />
+            )}
+            {formType == 'collection' && (
+              <CollectionCreationForm selectedImageUrl={selectedImage.url} />
+            )}
+            {formType == 'organization' && (
+              <OrganizationCreationForm selectedImageUrl={selectedImage.url} />
+            )}
           </div>
         </div>
         <div className='flex flex-2'>
@@ -54,7 +78,15 @@ const AdminDashboard = () => {
               {images
                 ?.filter((image) => image.status === 'not assigned')
                 .map((image) => (
-                  <div key={image.id}>
+                  <div
+                    key={image.id}
+                    onClick={() => handleImageSelection(image.id, image.url)}
+                    className={`border-4 ${
+                      selectedImage.id === image.id
+                        ? 'border-green-700'
+                        : 'border-transparent'
+                    }`}
+                  >
                     <img src={image.url} width={200} height={200} />
                   </div>
                 ))}

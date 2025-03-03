@@ -1,8 +1,6 @@
 import { sql } from 'drizzle-orm';
 import {
-  index,
   integer,
-  json,
   pgTableCreator,
   timestamp,
   varchar,
