@@ -21,7 +21,7 @@ export default async function AdminLayout({
       user.publicMetadata.roles.includes("admin")
     )
   ) {
-    // redirect("/404");
+    redirect("/404");
   }
 
   return (
