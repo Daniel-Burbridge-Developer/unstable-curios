@@ -9,7 +9,6 @@ import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,26 +17,22 @@ import {
 import { Input } from '@/components/ui/input';
 
 const formSchema = z.object({
-  itemName: z
+  collectionName: z
     .string()
     .min(2, {
-      message: 'Item name must be at least 2 characters.',
+      message: 'collection name must be at least 2 characters.',
     })
     .max(256, {
-      message: 'Item name must be at most 256 characters.',
+      message: 'collection name must be at most 256 characters.',
     }),
-  itemSetNumber: z.preprocess(
-    (val) => Number(val),
-    z.number().min(0, { message: 'Set Number must be non-negative' })
-  ),
-  itemDescription: z.string().min(2, {
-    message: 'Item description must be at least 2 characters.',
+  collectionDescription: z.string().min(2, {
+    message: 'collection description must be at least 2 characters.',
   }),
-  itemImageUrl: z.string().url({
-    message: 'Item image URL must be a valid URL.',
+  collectionImageUrl: z.string().url({
+    message: 'collection image URL must be a valid URL.',
   }),
   // Collection should be a dropdown from collection list pulled from DB
-  collectionName: z.string().min(1, {
+  organizationName: z.string().min(1, {
     message: 'Collection name must be at least 1 character.',
   }),
 });
@@ -51,19 +46,17 @@ export function CollectionCreationForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      itemName: '',
-      // @ts-expect-error This is being pre-processed into an int
-      itemSetNumber: '',
-      itemDescription: '',
-      itemImageUrl: selectedImageUrl,
       collectionName: '',
+      collectionDescription: '',
+      collectionImageUrl: selectedImageUrl,
+      organizationName: '',
     },
   });
 
-  // Update itemImageUrl when selectedImageUrl prop changes
+  // Update collectionImageUrl when selectedImageUrl prop changes
   useEffect(() => {
     if (selectedImageUrl) {
-      form.setValue('itemImageUrl', selectedImageUrl);
+      form.setValue('collectionImageUrl', selectedImageUrl);
     }
   }, [selectedImageUrl, form]);
 
@@ -79,57 +72,38 @@ export function CollectionCreationForm({
       <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
         <FormField
           control={form.control}
-          name='itemName'
+          name='collectionName'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Item Name</FormLabel>
               <FormControl>
                 <Input placeholder='name' {...field} />
               </FormControl>
-              {/* <FormDescription>This is the items name</FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name='itemSetNumber'
+          name='collectionDescription'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Item Set Number</FormLabel>
+              <FormLabel>Collection Description</FormLabel>
               <FormControl>
-                <Input type='number' placeholder='0' {...field} />
+                <Input placeholder='Description' {...field} />
               </FormControl>
-              {/* <FormDescription>This is the items set number</FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
         />
         <FormField
           control={form.control}
-          name='itemDescription'
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Item Description</FormLabel>
-              <FormControl>
-                <Input placeholder='description' {...field} />
-              </FormControl>
-              {/* <FormDescription>This is the items flavour text</FormDescription> */}
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name='itemImageUrl'
+          name='collectionImageUrl'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Item Image URL</FormLabel>
               <FormControl>
-                <Input
-                  placeholder='This should just be selecting the image'
-                  {...field}
-                />
+                <Input placeholder='Select an Image' {...field} />
               </FormControl>
               {/* <FormDescription>This is the items image</FormDescription> */}
               <FormMessage />
@@ -138,21 +112,18 @@ export function CollectionCreationForm({
         />
         <FormField
           control={form.control}
-          name='collectionName'
+          name='organizationName'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Collection Name</FormLabel>
+              <FormLabel>Organization Name</FormLabel>
               <FormControl>
                 <Input placeholder='This should be a dropdown' {...field} />
               </FormControl>
-              {/* <FormDescription>
-                This is the collection the item belongs to
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}
         />
-        <Button type='submit'>Create Item</Button>
+        <Button type='submit'>Create Collection</Button>
       </form>
     </Form>
   );
