@@ -14,8 +14,21 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+
 import { Input } from "@/components/ui/input";
-import { createCollection, getOrganisations } from "@/server/db/queries";
+import {
+  createCollection,
+  getOrganisations,
+  updateImage,
+} from "@/server/db/queries";
 import { toast } from "sonner";
 
 const formSchema = z.object({
@@ -34,9 +47,10 @@ const formSchema = z.object({
     message: "collection image URL must be a valid URL.",
   }),
   // Collection should be a dropdown from collection list pulled from DB
-  organizationName: z.string().min(1, {
-    message: "Collection name must be at least 1 character.",
-  }),
+  organizationId: z.preprocess(
+    (val) => Number(val),
+    z.number().min(0, { message: "Set Number must be non-negative" })
+  ),
 });
 
 export function CollectionCreationForm({
@@ -45,12 +59,13 @@ export function CollectionCreationForm({
   selectedImage: { id: number; url: string };
 }) {
   const [organisations, setOrganisations] = useState<
-    Array<Record<string, number>>
+    Array<{ id: number; name: string }>
   >([]);
 
-  const fetchOrgs = () => {
+  const fetchOrgs = async () => {
     const orgs = await getOrganisations();
-    const mutatedOrgs = orgs.map((org) => ({ [org.name]: org.id }));
+    // Assuming orgs is an array of objects like { id: number, name: string }
+    const mutatedOrgs = orgs.map((org) => ({ id: org.id, name: org.name }));
     setOrganisations(mutatedOrgs);
   };
   // 1. Define your form.
@@ -60,7 +75,8 @@ export function CollectionCreationForm({
       collectionName: "",
       collectionDescription: "",
       collectionImageUrl: selectedImage.url,
-      organizationName: "",
+      // @ts-expect-error This is being pre-processed to an int
+      organizationId: "",
     },
   });
 
@@ -71,22 +87,30 @@ export function CollectionCreationForm({
     }
   }, [selectedImage.url, form]);
 
+  useEffect(() => {
+    fetchOrgs();
+  }, []);
+
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
 
     const collection = {
       name: values.collectionName,
-
+      organisationId: values.organizationId,
       description: values.collectionDescription,
       collectionImageUrl: values.collectionImageUrl,
     };
     try {
-      // createCollection(collection)
+      createCollection({ collection });
       toast.success("Collection Created");
     } catch {
       toast.error("Collection not created");
     }
+
+    try {
+      updateImage(selectedImage.id);
+    } catch {}
   }
 
   return (
@@ -134,12 +158,26 @@ export function CollectionCreationForm({
         />
         <FormField
           control={form.control}
-          name="organizationName"
+          name="organizationId"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Organization Name</FormLabel>
               <FormControl>
-                <Input type="" {...field} />
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value ? String(field.value) : ""}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select Organization" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {organisations.map((org) => (
+                      <SelectItem key={org.id} value={String(org.id)}>
+                        {org.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>
