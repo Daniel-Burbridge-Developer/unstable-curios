@@ -75,7 +75,7 @@ export function CollectionCreationForm({
           name='collectionName'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Item Name</FormLabel>
+              <FormLabel>Collection Name</FormLabel>
               <FormControl>
                 <Input placeholder='name' {...field} />
               </FormControl>
@@ -101,7 +101,7 @@ export function CollectionCreationForm({
           name='collectionImageUrl'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Item Image URL</FormLabel>
+              <FormLabel>Collection Image URL</FormLabel>
               <FormControl>
                 <Input placeholder='Select an Image' {...field} />
               </FormControl>
