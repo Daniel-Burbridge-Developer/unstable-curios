@@ -23,14 +23,9 @@ export default function Home() {
     }[]
   >();
 
-  const {
-    fileCount,
-    fileIncrementCount,
-    fileDecrementCount,
-    friendCount,
-    friendDecrementCount,
-    friendIncrementCount,
-  } = useAppStore((state) => state);
+  const { fileCount, fileIncrementCount, fileDecrementCount } = useAppStore(
+    (state) => state
+  );
 
   async function fetchImages() {
     const fetchedImages = await getImages();
@@ -61,16 +56,6 @@ export default function Home() {
             Increment Count
           </button>
           <button type='button' onClick={fileDecrementCount}>
-            Decrement Count
-          </button>
-        </div>
-        <div>
-          FRIENDCount: {friendCount}
-          <hr />
-          <button type='button' onClick={friendIncrementCount}>
-            Increment Count
-          </button>
-          <button type='button' onClick={friendDecrementCount}>
             Decrement Count
           </button>
         </div>
