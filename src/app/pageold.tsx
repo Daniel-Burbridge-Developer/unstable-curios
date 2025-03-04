@@ -1,14 +1,14 @@
-'use client';
-import { UTUploadButton } from '@/components/ut-button-uploader';
-import { UTUploadDropzone } from '@/components/ut-dropzone-uploader';
-import Image from 'next/image';
-import { createUser } from '@/server/db/queries';
-import { useState, useEffect } from 'react';
-import { getImages } from '@/server/db/queries';
-import { useAppStore } from './providers/app-store-provider';
+"use client";
+import { UTUploadButton } from "@/components/ut-button-uploader";
+import { UTUploadDropzone } from "@/components/ut-dropzone-uploader";
+import Image from "next/image";
+import { createUser } from "@/server/db/queries";
+import { useState, useEffect } from "react";
+import { getImages } from "@/server/db/queries";
+import { useAppStore } from "./providers/app-store-provider";
 
 export default function Home() {
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState("");
   const [result, setResult] = useState<
     { id: number; username: string; createdAt: Date; updatedAt: Date | null }[]
   >([]);
@@ -37,33 +37,33 @@ export default function Home() {
   }, []);
 
   const companies = [
-    { name: 'Woolworths', imageURL: '/placeholder.webp' },
-    { name: 'Coles', imageURL: '/placeholder.webp' },
+    { name: "Woolworths", imageURL: "/placeholder.webp" },
+    { name: "Coles", imageURL: "/placeholder.webp" },
   ];
 
   async function handleCreateUser() {
-    await setUsername('user-' + Math.random().toString(36).substring(7));
+    await setUsername("user-" + Math.random().toString(36).substring(7));
     const inserted = await createUser(username);
     setResult(inserted);
   }
   return (
-    <div className='flex min-w-full min-h-svh flex-col gap-4 justify-center items-center bg-slate-800'>
+    <div className="flex min-w-full min-h-svh flex-col gap-4 justify-center items-center bg-slate-800">
       <div>
         <div>
           FILECount: {fileCount}
           <hr />
-          <button type='button' onClick={fileIncrementCount}>
+          <button type="button" onClick={fileIncrementCount}>
             Increment Count
           </button>
-          <button type='button' onClick={fileDecrementCount}>
+          <button type="button" onClick={fileDecrementCount}>
             Decrement Count
           </button>
         </div>
       </div>
       {companies.map((company) => (
-        <div key={company.name} className='flex items-center justify-center'>
+        <div key={company.name} className="flex items-center justify-center">
           <Image
-            src={company.imageURL ?? '/placeholder.webp'}
+            src={company.imageURL ?? "/placeholder.webp"}
             alt={company.name}
             width={200}
             height={200}
