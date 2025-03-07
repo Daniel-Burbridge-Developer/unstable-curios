@@ -1,10 +1,8 @@
-// src/actions/userActions.ts
-"use server";
+'use server';
 
-import { Users } from "lucide-react";
-import { db } from "./db";
-import * as schema from "./schema";
-import { eq } from "drizzle-orm";
+import { db } from './db';
+import * as schema from './schema';
+import { eq } from 'drizzle-orm';
 
 // Function to create a new user
 export async function createUser(username: string) {
@@ -82,7 +80,7 @@ export async function createImage({
 export async function updateImage(imageId: number) {
   const updatedImage = await db
     .update(schema.image)
-    .set({ status: "assigned to organisation" })
+    .set({ status: 'assigned to organisation' })
     .where(eq(schema.image.id, imageId))
     .returning();
 
