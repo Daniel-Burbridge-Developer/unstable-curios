@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -14,7 +14,20 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form';
+
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
+
+import { createItem, getCollections, updateImage } from '@/server/db/queries';
+
 import { Input } from '@/components/ui/input';
+
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   itemName: z
@@ -36,9 +49,10 @@ const formSchema = z.object({
     message: 'Item image URL must be a valid URL.',
   }),
   // Collection should be a dropdown from collection list pulled from DB
-  collectionName: z.string().min(1, {
-    message: 'Collection name must be at least 1 character.',
-  }),
+  collectionId: z.preprocess(
+    (val) => Number(val),
+    z.number().min(0, { message: 'Id Number must be non-negative' })
+  ),
 });
 
 export function ItemCreationForm({
@@ -46,6 +60,20 @@ export function ItemCreationForm({
 }: {
   selectedImage: { id: number; url: string };
 }) {
+  const [collections, setCollections] = useState<
+    Array<{ id: number; name: string }>
+  >([]);
+
+  const fetchCollections = async () => {
+    const collections = await getCollections();
+    // Assuming orgs is an array of objects like { id: number, name: string }
+    const mutatedCollections = collections.map((collection) => ({
+      id: collection.id,
+      name: collection.name,
+    }));
+    setCollections(mutatedCollections);
+  };
+
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -55,7 +83,8 @@ export function ItemCreationForm({
       itemSetNumber: '',
       itemDescription: '',
       itemImageUrl: selectedImage.url,
-      collectionName: '',
+      // @ts-expect-error This is being pre-processed to an int
+      collectionId,
     },
   });
 
@@ -66,11 +95,31 @@ export function ItemCreationForm({
     }
   }, [selectedImage.url, form]);
 
+  useEffect(() => {
+    fetchCollections();
+  }, []);
+
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
     console.log(values);
+
+    const item = {
+      name: values.itemName,
+      setNumber: values.itemSetNumber,
+      collectionId: values.collectionId,
+      description: values.itemDescription,
+      itemImageUrl: values.itemImageUrl,
+    };
+    try {
+      createItem({ item });
+      toast.success('item Created');
+    } catch {
+      toast.error('item not created');
+    }
+
+    try {
+      updateImage(selectedImage.id);
+    } catch {}
   }
 
   return (
@@ -137,16 +186,27 @@ export function ItemCreationForm({
         />
         <FormField
           control={form.control}
-          name='collectionName'
+          name='collectionId'
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Collection Name</FormLabel>
+              <FormLabel>Organization Name</FormLabel>
               <FormControl>
-                <Input placeholder='This should be a dropdown' {...field} />
+                <Select
+                  onValueChange={field.onChange}
+                  value={field.value ? String(field.value) : ''}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder='Select Organization' />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {collections.map((org) => (
+                      <SelectItem key={org.id} value={String(org.id)}>
+                        {org.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </FormControl>
-              {/* <FormDescription>
-                This is the collection the item belongs to
-              </FormDescription> */}
               <FormMessage />
             </FormItem>
           )}

@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { useEffect, useState } from 'react';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -13,7 +13,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 
 import {
   Select,
@@ -21,40 +21,40 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
-import { Input } from "@/components/ui/input";
+import { Input } from '@/components/ui/input';
 import {
   createCollection,
   getOrganisations,
   updateImage,
-} from "@/server/db/queries";
-import { toast } from "sonner";
+} from '@/server/db/queries';
+import { toast } from 'sonner';
 
 const formSchema = z.object({
   collectionName: z
     .string()
     .min(2, {
-      message: "collection name must be at least 2 characters.",
+      message: 'collection name must be at least 2 characters.',
     })
     .max(256, {
-      message: "collection name must be at most 256 characters.",
+      message: 'collection name must be at most 256 characters.',
     }),
   collectionDescription: z.string().min(2, {
-    message: "collection description must be at least 2 characters.",
+    message: 'collection description must be at least 2 characters.',
   }),
   collectionImageUrl: z.string().min(2, {
-    message: "collection image URL must be a valid URL.",
+    message: 'collection image URL must be a valid URL.',
   }),
   // Collection should be a dropdown from collection list pulled from DB
   organizationId: z.preprocess(
     (val) => Number(val),
-    z.number().min(0, { message: "Set Number must be non-negative" })
+    z.number().min(0, { message: 'Id Number must be non-negative' })
   ),
 });
 
 export function CollectionCreationForm({
-  selectedImage = { id: 0, url: "" },
+  selectedImage = { id: 0, url: '' },
 }: {
   selectedImage: { id: number; url: string };
 }) {
@@ -72,18 +72,18 @@ export function CollectionCreationForm({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      collectionName: "",
-      collectionDescription: "",
+      collectionName: '',
+      collectionDescription: '',
       collectionImageUrl: selectedImage.url,
       // @ts-expect-error This is being pre-processed to an int
-      organizationId: "",
+      organizationId: '',
     },
   });
 
   // Update collectionImageUrl when selectedImageUrl prop changes
   useEffect(() => {
     if (selectedImage.url) {
-      form.setValue("collectionImageUrl", selectedImage.url);
+      form.setValue('collectionImageUrl', selectedImage.url);
     }
   }, [selectedImage.url, form]);
 
@@ -103,9 +103,9 @@ export function CollectionCreationForm({
     };
     try {
       createCollection({ collection });
-      toast.success("Collection Created");
+      toast.success('Collection Created');
     } catch {
-      toast.error("Collection not created");
+      toast.error('Collection not created');
     }
 
     try {
@@ -115,15 +115,15 @@ export function CollectionCreationForm({
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className='space-y-8'>
         <FormField
           control={form.control}
-          name="collectionName"
+          name='collectionName'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Collection Name</FormLabel>
               <FormControl>
-                <Input placeholder="name" {...field} />
+                <Input placeholder='name' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -131,12 +131,12 @@ export function CollectionCreationForm({
         />
         <FormField
           control={form.control}
-          name="collectionDescription"
+          name='collectionDescription'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Collection Description</FormLabel>
               <FormControl>
-                <Input placeholder="Description" {...field} />
+                <Input placeholder='Description' {...field} />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -144,12 +144,12 @@ export function CollectionCreationForm({
         />
         <FormField
           control={form.control}
-          name="collectionImageUrl"
+          name='collectionImageUrl'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Collection Image URL</FormLabel>
               <FormControl>
-                <Input placeholder="Select an Image" {...field} />
+                <Input placeholder='Select an Image' {...field} />
               </FormControl>
               {/* <FormDescription>This is the items image</FormDescription> */}
               <FormMessage />
@@ -158,17 +158,17 @@ export function CollectionCreationForm({
         />
         <FormField
           control={form.control}
-          name="organizationId"
+          name='organizationId'
           render={({ field }) => (
             <FormItem>
               <FormLabel>Organization Name</FormLabel>
               <FormControl>
                 <Select
                   onValueChange={field.onChange}
-                  value={field.value ? String(field.value) : ""}
+                  value={field.value ? String(field.value) : ''}
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="Select Organization" />
+                    <SelectValue placeholder='Select Organization' />
                   </SelectTrigger>
                   <SelectContent>
                     {organisations.map((org) => (
@@ -183,7 +183,7 @@ export function CollectionCreationForm({
             </FormItem>
           )}
         />
-        <Button type="submit">Create Collection</Button>
+        <Button type='submit'>Create Collection</Button>
       </form>
     </Form>
   );

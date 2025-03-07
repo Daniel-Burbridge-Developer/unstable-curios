@@ -68,6 +68,21 @@ export async function createCollection({
   return insertedCollection;
 }
 
+export async function createItem({
+  item,
+}: {
+  item: {
+    name: string;
+    collectionId: number;
+    setNumber: number;
+    description: string;
+    itemImageUrl: string;
+  };
+}) {
+  const insertedItem = await db.insert(schema.item).values(item).returning();
+  return insertedItem;
+}
+
 export async function createImage({
   image,
 }: {
