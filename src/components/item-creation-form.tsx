@@ -84,7 +84,7 @@ export function ItemCreationForm({
       itemDescription: '',
       itemImageUrl: selectedImage.url,
       // @ts-expect-error This is being pre-processed to an int
-      collectionId,
+      collectionId: '',
     },
   });
 
