@@ -7,9 +7,12 @@ import { completeOnboarding } from "./_actions";
 
 export default function OnboardingComponent() {
   const [error, setError] = React.useState("");
-  const { user } = useUser();
+  const { user, isLoaded } = useUser();
   const router = useRouter();
 
+  if (!isLoaded) {
+    return <h1>Loading...</h1>;
+  }
   const handleSubmit = async (formData: FormData) => {
     const res = await completeOnboarding(formData);
     if (res?.message) {

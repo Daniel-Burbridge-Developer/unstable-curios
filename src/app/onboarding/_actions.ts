@@ -10,13 +10,13 @@ export const completeOnboarding = async (formData: FormData) => {
   }
 
   const client = await clerkClient();
+  const currentUser = await client.users.getUser(userId);
 
   try {
     const res = await client.users.updateUser(userId, {
       publicMetadata: {
+        ...currentUser.publicMetadata,
         onboardingComplete: true,
-        applicationName: formData.get("applicationName"),
-        applicationType: formData.get("applicationType"),
       },
     });
     return { message: res.publicMetadata };
