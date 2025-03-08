@@ -1,4 +1,4 @@
-import { currentUser } from "@clerk/nextjs/server";
+import { currentUser } from '@clerk/nextjs/server';
 
 export default async function UserLayout({
   children,
@@ -18,11 +18,11 @@ export default async function UserLayout({
   if (
     !(
       Array.isArray(user.publicMetadata?.roles) &&
-      user.publicMetadata.roles.includes("user")
+      user.publicMetadata.roles.includes('user')
     )
   ) {
     <div>
-      <h1>You're not a user - How did we even get here?</h1>
+      <h1>{"You're not a user - How did we even get here?"}</h1>
     </div>;
   }
 
