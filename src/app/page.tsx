@@ -1,22 +1,11 @@
-import Image from "next/image";
-
 export default function Home() {
-  const companies = [
-    { name: "Woolworths", imageURL: "/placeholder.webp" },
-    { name: "coles", imageURL: "/placeholder.webp" },
-  ];
   return (
-    <div className="flex min-w-full min-h-svh flex-col gap-4 justify-center items-center bg-slate-800">
-      {companies.map((company) => (
-        <div key={company.name} className="flex items-center justify-center">
-          <Image
-            src={company.imageURL ?? "/placeholder.webp"}
-            alt={company.name}
-            width={200}
-            height={200}
-          />
-        </div>
-      ))}
+    <div>
+      <div className="flex items-center justify-center min-h-screen bg-gray-900">
+        <h1 className="text-8xl font-extrabold bg-gradient-to-r from-fuchsia-500 to-green-500 text-transparent bg-clip-text text-center animate-pulse">
+          UnstableCurios
+        </h1>
+      </div>
     </div>
   );
 }
