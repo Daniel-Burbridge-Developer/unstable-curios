@@ -1,7 +1,12 @@
+"use client";
+import { useUser } from "@clerk/nextjs";
+
 const UserPage = () => {
+  const { user } = useUser();
+  const userId = user?.id;
   return (
     <div className="flex justify-center items-center">
-      <h1>Hello there how are you.</h1>
+      <h1>{userId}</h1>
     </div>
   );
 };
