@@ -60,23 +60,23 @@ const UserPage = () => {
   }, []);
 
   return (
-    <div className='flex justify-center items-center'>
-      <div>
-        {`Hello: ${
+    <div className='flex flex-col h-full justify-center items-center p-4'>
+      <div className='mb-4 text-xl font-semibold'>
+        {`Hello, ${
           user.username
             ? user.username.charAt(0).toUpperCase() + user.username.slice(1)
-            : ''
+            : 'User'
         }`}
       </div>
-      <div>
+      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
         {organisations.map((org) => (
-          <div key={org.id}>
+          <div key={org.id} className='flex flex-col items-center'>
             <img
               src={org.imageUrl ?? ''}
               alt={org.description ?? ''}
-              width={200}
-              height={200}
+              className='w-48 h-48 object-cover rounded-lg'
             />
+            <div className='mt-2 text-center'>{org.name}</div>
           </div>
         ))}
       </div>

@@ -26,5 +26,5 @@ export default async function UserLayout({
     </div>;
   }
 
-  return <div>{children}</div>;
+  return <div className='h-full'>{children}</div>;
 }
