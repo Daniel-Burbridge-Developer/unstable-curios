@@ -1,8 +1,9 @@
-'use server';
+"use server";
 
-import { db } from './db';
-import * as schema from './schema';
-import { eq } from 'drizzle-orm';
+import { Schema } from "zod";
+import { db } from "./db";
+import * as schema from "./schema";
+import { eq } from "drizzle-orm";
 
 // Function to create a new user
 export async function createUser(username: string | null, clerkId: string) {
@@ -61,6 +62,26 @@ export async function getCollections() {
   return collections;
 }
 
+export async function getCollectionsFromOrg(org_id: number) {
+  const collections = await db
+    .select()
+    .from(schema.collection)
+    .where(eq(schema.collection.organisationId, org_id))
+    .execute();
+
+  return collections;
+}
+
+export async function getItemsFromCollection(collection_id: number) {
+  const items = await db
+    .select()
+    .from(schema.item)
+    .where(eq(schema.item.collectionId, collection_id))
+    .execute();
+
+  return items;
+}
+
 export async function createCollection({
   collection,
 }: {
@@ -106,7 +127,7 @@ export async function createImage({
 export async function updateImage(imageId: number) {
   const updatedImage = await db
     .update(schema.image)
-    .set({ status: 'assigned to organisation' })
+    .set({ status: "assigned to organisation" })
     .where(eq(schema.image.id, imageId))
     .returning();
 

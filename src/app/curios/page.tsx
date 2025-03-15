@@ -1,7 +1,12 @@
-'use client';
-import { useUser } from '@clerk/nextjs';
-import { useState, useEffect } from 'react';
-import { getOrganisations, getUserByClerkId } from '@/server/db/queries';
+"use client";
+import { useUser } from "@clerk/nextjs";
+import { useState, useEffect } from "react";
+import {
+  getOrganisations,
+  getUserByClerkId,
+  getCollectionsFromOrg,
+  getItemsFromCollection,
+} from "@/server/db/queries";
 
 interface User {
   id: number;
@@ -18,23 +23,48 @@ interface Organisation {
   imageUrl: string | null;
 }
 
+interface Collections {
+  id: number;
+  organisationId: number | null;
+  name: string;
+  description: string | null;
+  imageUrl: string | null;
+}
+
+interface Items {
+  id: number;
+  collectionId: number | null;
+  name: string;
+  setNumber: number | null;
+  description: string | null;
+  imageUrl: string | null;
+}
+
 const UserPage = () => {
   const [user, setUser] = useState<User>({
     id: 0,
-    clerkId: '',
+    clerkId: "",
     username: null,
     createdAt: new Date(),
     updatedAt: null,
   });
-
   const [organisations, setOrganisations] = useState<Array<Organisation>>([]);
-
+  const [collections, setCollections] = useState<Array<Collections>>([]);
+  const [items, setItems] = useState<Array<Items>>([]);
   const { user: clerkUser } = useUser();
+
+  const [selectedOrg, setSelectedOrg] = useState({ name: "", id: 0 });
+  const [selectedCollection, setSelectedCollection] = useState({
+    name: "",
+    id: 0,
+  });
+  const [selectedItem, setSelectedItem] = useState({ name: "", id: 0 });
+
   const clerkId = clerkUser?.id;
 
   async function fetchCurrentUserInformation() {
     if (clerkId === undefined) {
-      console.log('error, panic, how do I not have an ID');
+      console.log("error, panic, how do I not have an ID");
       return;
     }
 
@@ -42,7 +72,7 @@ const UserPage = () => {
       const [dbUser] = await getUserByClerkId(clerkId);
       setUser(dbUser);
     } catch (error) {
-      console.error('Failed to fetch user information:', error);
+      console.error("Failed to fetch user information:", error);
     }
   }
 
@@ -50,6 +80,22 @@ const UserPage = () => {
     const organisations = await getOrganisations();
     setOrganisations(organisations);
   }
+
+  async function fetchCollections() {
+    const collections = await getCollectionsFromOrg(selectedOrg.id);
+    setCollections(collections);
+  }
+
+  async function fetchItems() {
+    const items = await getItemsFromCollection(selectedCollection.id);
+    setItems(items);
+  }
+
+  const clearFilter = () => {
+    setSelectedOrg({ name: "", id: 0 });
+    setSelectedCollection({ name: "", id: 0 });
+    setSelectedItem({ name: "", id: 0 });
+  };
 
   useEffect(() => {
     fetchCurrentUserInformation();
@@ -60,25 +106,51 @@ const UserPage = () => {
   }, []);
 
   return (
-    <div className='flex flex-col h-full justify-center items-center p-4'>
-      <div className='mb-4 text-xl font-semibold'>
+    <div className="flex flex-col items-center h-full p-4">
+      <div className="mb-4 text-xl font-semibold">
         {`Hello, ${
           user.username
             ? user.username.charAt(0).toUpperCase() + user.username.slice(1)
-            : 'User'
+            : "User"
         }`}
       </div>
-      <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4'>
-        {organisations.map((org) => (
-          <div key={org.id} className='flex flex-col items-center'>
-            <img
-              src={org.imageUrl ?? ''}
-              alt={org.description ?? ''}
-              className='w-48 h-48 object-cover rounded-lg'
-            />
-            <div className='mt-2 text-center'>{org.name}</div>
-          </div>
-        ))}
+      <div>
+        <button onClick={() => clearFilter()}>Clear Filters</button>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {selectedOrg.name == "" &&
+          organisations.map((org) => (
+            <div key={org.id} className="flex flex-col items-center">
+              <img
+                onClick={() => {
+                  setSelectedOrg({ name: org.name, id: org.id });
+                  fetchCollections();
+                  console.log(`${selectedOrg}`);
+                }}
+                src={org.imageUrl ?? ""}
+                alt={org.description ?? ""}
+                className="w-48 h-48 object-cover rounded-lg"
+              />
+              <div className="mt-2 text-center">{org.name}</div>
+            </div>
+          ))}
+        {/* {END OF ORGS} */}
+        {selectedCollection.name == "" &&
+          selectedOrg.name != "" &&
+          organisations.map((org) => (
+            <div
+              onClick={() => {}}
+              key={org.id}
+              className="flex flex-col items-center"
+            >
+              <img
+                src={org.imageUrl ?? ""}
+                alt={org.description ?? ""}
+                className="w-48 h-48 object-cover rounded-lg"
+              />
+              <div className="mt-2 text-center">{org.name}</div>
+            </div>
+          ))}
       </div>
     </div>
   );
