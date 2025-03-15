@@ -1,9 +1,8 @@
-"use server";
+'use server';
 
-import { Schema } from "zod";
-import { db } from "./db";
-import * as schema from "./schema";
-import { eq } from "drizzle-orm";
+import { db } from './db';
+import * as schema from './schema';
+import { eq, sql, and } from 'drizzle-orm';
 
 // Function to create a new user
 export async function createUser(username: string | null, clerkId: string) {
@@ -127,7 +126,7 @@ export async function createImage({
 export async function updateImage(imageId: number) {
   const updatedImage = await db
     .update(schema.image)
-    .set({ status: "assigned to organisation" })
+    .set({ status: 'assigned to organisation' })
     .where(eq(schema.image.id, imageId))
     .returning();
 
@@ -137,4 +136,54 @@ export async function updateImage(imageId: number) {
 export async function getImages() {
   const images = await db.select().from(schema.image).execute();
   return images;
+}
+
+export async function collectOrIncreaseItem(user_id: number, item_id: number) {
+  const existingPair = await db
+    .select()
+    .from(schema.userItem)
+    .where(
+      and(
+        eq(schema.userItem.userId, user_id),
+        eq(schema.userItem.itemId, item_id)
+      )
+    )
+    .execute();
+
+  if (existingPair.length > 0) {
+    const updatedPair = await db
+      .update(schema.userItem)
+      .set({ quantity: sql`${schema.userItem.quantity} + 1` })
+      .where(
+        and(
+          eq(schema.userItem.userId, user_id),
+          eq(schema.userItem.itemId, item_id)
+        )
+      )
+      .returning();
+
+    return updatedPair;
+  } else {
+    const insertedPair = await db
+      .insert(schema.userItem)
+      .values({ userId: user_id, itemId: item_id, quantity: 1 })
+      .returning();
+
+    return insertedPair;
+  }
+}
+
+export async function decreaseCollectedItem(user_id: number, item_id: number) {
+  const updatedPair = await db
+    .update(schema.userItem)
+    .set({ quantity: sql`GREATEST(${schema.userItem.quantity} - 1, 0)` })
+    .where(
+      and(
+        eq(schema.userItem.userId, user_id),
+        eq(schema.userItem.itemId, item_id)
+      )
+    )
+    .returning();
+
+  return updatedPair;
 }
