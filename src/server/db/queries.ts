@@ -17,6 +17,16 @@ export async function createUser(username: string | null, clerkId: string) {
   return insertedUser;
 }
 
+export async function getUserByClerkId(clerkId: string) {
+  const dbUser = await db
+    .select()
+    .from(schema.user)
+    .where(eq(schema.user.clerkId, clerkId))
+    .execute();
+
+  return dbUser;
+}
+
 export async function getOrganisations() {
   const organisations = await db.select().from(schema.organisation).execute();
 
