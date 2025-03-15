@@ -58,7 +58,8 @@ export const item = createTable('item', {
 
 export const user = createTable('user', {
   id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
-  username: varchar('username', { length: 256 }).unique().notNull(),
+  clerkId: varchar('clerk_id', { length: 256 }).unique().notNull(),
+  username: varchar('username', { length: 256 }).unique(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

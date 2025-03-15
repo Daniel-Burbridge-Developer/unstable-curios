@@ -5,10 +5,11 @@ import * as schema from './schema';
 import { eq } from 'drizzle-orm';
 
 // Function to create a new user
-export async function createUser(username: string) {
+export async function createUser(username: string | null, clerkId: string) {
   const insertedUser = await db
     .insert(schema.user)
     .values({
+      clerkId,
       username,
     })
     .returning();
