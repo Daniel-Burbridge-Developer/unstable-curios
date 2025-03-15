@@ -99,7 +99,7 @@ export function CollectionCreationForm({
       name: values.collectionName,
       organisationId: values.organizationId,
       description: values.collectionDescription,
-      collectionImageUrl: values.collectionImageUrl,
+      imageUrl: values.collectionImageUrl,
     };
     try {
       createCollection({ collection });

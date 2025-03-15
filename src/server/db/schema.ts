@@ -18,7 +18,7 @@ export const organisation = createTable('organisation', {
   id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
   name: varchar('name', { length: 256 }).notNull(),
   description: varchar('description', { length: 1024 }),
-  imageURL: varchar('image_url', { length: 1024 }),
+  imageUrl: varchar('image_url', { length: 1024 }),
   createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -32,7 +32,7 @@ export const collection = createTable('collection', {
   organisationId: integer('organisation_id').references(() => organisation.id),
   name: varchar('name', { length: 256 }).notNull(),
   description: varchar('description', { length: 1024 }),
-  imageURL: varchar('image_url', { length: 1024 }),
+  imageUrl: varchar('image_url', { length: 1024 }),
   createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),

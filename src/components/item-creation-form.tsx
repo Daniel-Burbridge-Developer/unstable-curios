@@ -102,16 +102,16 @@ export function ItemCreationForm({
   // 2. Define a submit handler.
   function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
-
-    const item = {
-      name: values.itemName,
-      setNumber: values.itemSetNumber,
-      collectionId: values.collectionId,
-      description: values.itemDescription,
-      itemImageUrl: values.itemImageUrl,
-    };
     try {
-      createItem({ item });
+      createItem({
+        item: {
+          name: values.itemName,
+          setNumber: values.itemSetNumber,
+          description: values.itemDescription,
+          imageUrl: values.itemImageUrl,
+          collectionId: values.collectionId,
+        },
+      });
       toast.success('item Created');
     } catch {
       toast.error('item not created');

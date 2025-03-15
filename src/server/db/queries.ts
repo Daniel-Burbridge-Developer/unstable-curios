@@ -45,7 +45,7 @@ export async function createOrganisation({
   const inputValue = {
     name: organisation.organisationName,
     description: organisation.organisationDescription,
-    organisationImageUrl: organisation.organisationImageUrl,
+    imageUrl: organisation.organisationImageUrl,
   };
   const insertedOrganisation = await db
     .insert(schema.organisation)
@@ -68,7 +68,7 @@ export async function createCollection({
     name: string;
     organisationId: number;
     description: string;
-    collectionImageUrl: string;
+    imageUrl: string;
   };
 }) {
   const insertedCollection = await db
@@ -87,7 +87,7 @@ export async function createItem({
     collectionId: number;
     setNumber: number;
     description: string;
-    itemImageUrl: string;
+    imageUrl: string;
   };
 }) {
   const insertedItem = await db.insert(schema.item).values(item).returning();

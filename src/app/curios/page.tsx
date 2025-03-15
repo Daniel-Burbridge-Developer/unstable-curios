@@ -15,7 +15,7 @@ interface Organisation {
   id: number;
   name: string;
   description: string | null;
-  imageURL: string | null;
+  imageUrl: string | null;
 }
 
 const UserPage = () => {
@@ -72,8 +72,8 @@ const UserPage = () => {
         {organisations.map((org) => (
           <div key={org.id}>
             <img
-              src={org.imageURL ?? ''}
-              alt={org.description}
+              src={org.imageUrl ?? ''}
+              alt={org.description ?? ''}
               width={200}
               height={200}
             />
