@@ -187,3 +187,8 @@ export async function decreaseCollectedItem(user_id: number, item_id: number) {
 
   return updatedPair;
 }
+
+export async function getCollectionPairs() {
+  const images = await db.select().from(schema.userItem).execute();
+  return images;
+}

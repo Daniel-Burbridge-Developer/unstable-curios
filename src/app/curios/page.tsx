@@ -8,6 +8,7 @@ import {
   getItemsFromCollection,
   decreaseCollectedItem,
   collectOrIncreaseItem,
+  getCollectionPairs,
 } from '@/server/db/queries';
 import { Button } from '@/components/ui/button';
 
@@ -126,8 +127,20 @@ const UserPage = () => {
     setCollectionPairs(updatedCollectionPairs);
   };
 
-  const incCollectedItem = () => {
-    collectOrIncreaseItem(user.id, selectedItem.id);
+  const incCollectedItem = async () => {
+    const [updatedPair] = await collectOrIncreaseItem(user.id, selectedItem.id);
+    const updatedCollectionPairs = collectionPairs.filter(
+      (pair) => !(pair.userId == user.id && pair.itemId == selectedItem.id)
+    );
+    const mutatedPair = {
+      id: updatedPair.id,
+      userId: updatedPair.userId,
+      itemId: updatedPair.itemId,
+      quantity: updatedPair.quantity,
+    };
+
+    updatedCollectionPairs.push(mutatedPair);
+    setCollectionPairs(updatedCollectionPairs);
   };
 
   useEffect(() => {
@@ -136,6 +149,7 @@ const UserPage = () => {
 
   useEffect(() => {
     fetchOrganisations();
+    fetchCollectionPairs();
   }, []);
 
   useEffect(() => {
@@ -149,6 +163,17 @@ const UserPage = () => {
       fetchItems();
     }
   }, [selectedCollection]);
+
+  useEffect(() => {
+    if (collectionPairs.length == 0) {
+      console.log('no pairs');
+    }
+  }, [collectionPairs]);
+
+  const fetchCollectionPairs = async () => {
+    const collectionPairs = await getCollectionPairs();
+    setCollectionPairs(collectionPairs);
+  };
 
   return (
     <div className='flex flex-col items-center h-full p-4'>
@@ -168,6 +193,14 @@ const UserPage = () => {
             {selectedItem.name + ' '}
             <Button onClick={() => decCollectedItem()}>lower count</Button>
             <Button onClick={() => incCollectedItem()}>increase count</Button>
+            <div>
+              {collectionPairs.map((pair) => {
+                if (pair.itemId == selectedItem.id && pair.userId == user.id) {
+                  return <span key={pair.id}>{pair.quantity}</span>;
+                }
+                return null;
+              })}
+            </div>
           </div>
         )}
       </div>
