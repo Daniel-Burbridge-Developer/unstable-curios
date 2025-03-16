@@ -12,6 +12,8 @@ export const completeOnboarding = async (formData: FormData) => {
   const client = await clerkClient();
   const currentUser = await client.users.getUser(userId);
 
+  console.log(formData);
+
   try {
     const res = await client.users.updateUser(userId, {
       publicMetadata: {
