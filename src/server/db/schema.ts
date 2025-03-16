@@ -41,9 +41,25 @@ export const collection = createTable('collection', {
   ),
 });
 
-export const item = createTable('item', {
+export const subcollection = createTable('subcollection', {
   id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
   collectionId: integer('collection_id').references(() => collection.id),
+  name: varchar('name', { length: 256 }).notNull(),
+  description: varchar('description', { length: 1024 }),
+  imageUrl: varchar('image_url', { length: 1024 }),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).$onUpdate(
+    () => new Date()
+  ),
+});
+
+export const item = createTable('item', {
+  id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
+  subcollectionId: integer('subcollection_id').references(
+    () => subcollection.id
+  ),
   name: varchar('name', { length: 256 }).notNull(),
   setNumber: integer('set_number'),
   description: varchar('description', { length: 1024 }),
@@ -92,15 +108,6 @@ export const userItem = createTable('user_item', {
     () => new Date()
   ),
 });
-
-// #### UserItem (Linking Users and Cards)
-
-// - `id` (UUID, Primary Key)
-// - `userId` (UUID, Foreign Key referencing User.id)
-// - `cardId` (UUID, Foreign Key referencing Card.id)
-// - `quantity` (Integer)
-// - `createdAt` (Timestamp)
-// - `updatedAt` (Timestamp)
 
 // #### Friendship
 

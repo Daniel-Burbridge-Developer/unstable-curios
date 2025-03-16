@@ -5,7 +5,7 @@ import {
   getOrganisations,
   getUserByClerkId,
   getCollectionsFromOrg,
-  getItemsFromCollection,
+  getItemsFromSubcollection,
   decreaseCollectedItem,
   collectOrIncreaseItem,
   getCollectionPairs,
@@ -37,7 +37,7 @@ interface Collections {
 
 interface Items {
   id: number;
-  collectionId: number | null;
+  subcollectionId: number | null;
   name: string;
   setNumber: number | null;
   description: string | null;
@@ -101,7 +101,7 @@ const UserPage = () => {
   }
 
   async function fetchItems() {
-    const items = await getItemsFromCollection(selectedCollection.id);
+    const items = await getItemsFromSubcollection(selectedCollection.id);
     setItems(items);
   }
 

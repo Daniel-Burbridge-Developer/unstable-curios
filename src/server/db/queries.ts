@@ -71,11 +71,11 @@ export async function getCollectionsFromOrg(org_id: number) {
   return collections;
 }
 
-export async function getItemsFromCollection(collection_id: number) {
+export async function getItemsFromSubcollection(collection_id: number) {
   const items = await db
     .select()
     .from(schema.item)
-    .where(eq(schema.item.collectionId, collection_id))
+    .where(eq(schema.item.subcollectionId, collection_id))
     .execute();
 
   return items;
