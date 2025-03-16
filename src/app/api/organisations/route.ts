@@ -1,7 +1,7 @@
 // app/api/organisations/route.ts
-import { getOrganisations, createOrganisation } from "@/server/db/queries";
+import { getOrganisations, createOrganisation } from '@/server/db/queries';
 
-export async function GET(request: Request) {
+export async function GET() {
   const organisations = await getOrganisations();
   return new Response(JSON.stringify(organisations), { status: 200 });
 }
