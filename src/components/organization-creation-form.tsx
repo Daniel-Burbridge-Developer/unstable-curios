@@ -58,18 +58,21 @@ export function OrganisationCreationForm({
   }, [selectedImage.url, form]);
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof formSchema>) {
     console.log(values);
     try {
-      createOrganisation({ organisation: values });
+      await createOrganisation({ organisation: values });
       toast.success('Organisation Created');
-    } catch {
+    } catch (error) {
       toast.error('Organisation not created');
+      console.error('Error creating organisation:', error);
     }
 
     try {
-      updateImage(selectedImage.id);
-    } catch {}
+      await updateImage(selectedImage.id);
+    } catch (error) {
+      console.error('Error updating image:', error);
+    }
   }
 
   return (

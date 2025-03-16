@@ -18,7 +18,7 @@ export const organisation = createTable('organisation', {
   id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
   name: varchar('name', { length: 256 }).notNull(),
   description: varchar('description', { length: 1024 }),
-  imageURL: varchar('image_url', { length: 1024 }),
+  imageUrl: varchar('image_url', { length: 1024 }),
   createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -32,7 +32,7 @@ export const collection = createTable('collection', {
   organisationId: integer('organisation_id').references(() => organisation.id),
   name: varchar('name', { length: 256 }).notNull(),
   description: varchar('description', { length: 1024 }),
-  imageURL: varchar('image_url', { length: 1024 }),
+  imageUrl: varchar('image_url', { length: 1024 }),
   createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -58,7 +58,8 @@ export const item = createTable('item', {
 
 export const user = createTable('user', {
   id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
-  username: varchar('username', { length: 256 }).unique().notNull(),
+  clerkId: varchar('clerk_id', { length: 256 }).unique().notNull(),
+  username: varchar('username', { length: 256 }).unique(),
   createdAt: timestamp('created_at', { withTimezone: true })
     .default(sql`CURRENT_TIMESTAMP`)
     .notNull(),
@@ -79,41 +80,18 @@ export const image = createTable('image', {
   ),
 });
 
-// #### User
-
-// - `id` (UUID, Primary Key)
-// - `username` (String, Unique)
-// - `email` (String, Unique)
-// - `password` (String, Hashed)
-// - `createdAt` (Timestamp)
-// - `updatedAt` (Timestamp)
-
-// #### organisation
-
-// - `id` (UUID, Primary Key)
-// - `name` (String)
-// - `description` (Text, Optional)
-// - `createdAt` (Timestamp)
-// - `updatedAt` (Timestamp)
-
-// #### Collection
-
-// - `id` (UUID, Primary Key)
-// - `organisationId` (UUID, Foreign Key referencing organisation.id)
-// - `name` (String)
-// - `description` (Text, Optional)
-// - `createdAt` (Timestamp)
-// - `updatedAt` (Timestamp)
-
-// #### Item
-
-// - `id` (UUID, Primary Key)
-// - `collectionId` (UUID, Foreign Key referencing Collection.id)
-// - `name` (String)
-// - `description` (Text)
-// - `imageUrl` (String)
-// - `createdAt` (Timestamp)
-// - `updatedAt` (Timestamp)
+export const userItem = createTable('user_item', {
+  id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
+  userId: integer('user_id').references(() => user.id),
+  itemId: integer('item_id').references(() => item.id),
+  quantity: integer('quantity').notNull(),
+  createdAt: timestamp('created_at', { withTimezone: true })
+    .default(sql`CURRENT_TIMESTAMP`)
+    .notNull(),
+  updatedAt: timestamp('updated_at', { withTimezone: true }).$onUpdate(
+    () => new Date()
+  ),
+});
 
 // #### UserItem (Linking Users and Cards)
 

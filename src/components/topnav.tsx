@@ -47,7 +47,7 @@ export default function TopNav() {
             <NavigationMenuItem>
               <Link href="/" legacyBehavior passHref>
                 <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                  Curios
+                  Home
                 </NavigationMenuLink>
               </Link>
             </NavigationMenuItem>
@@ -75,6 +75,18 @@ export default function TopNav() {
                       className={navigationMenuTriggerStyle()}
                     >
                       Admin
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              )}
+            {Array.isArray(user?.publicMetadata?.roles) &&
+              user.publicMetadata.roles.includes("user") && (
+                <NavigationMenuItem>
+                  <Link href="curios" legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={navigationMenuTriggerStyle()}
+                    >
+                      Curios
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>

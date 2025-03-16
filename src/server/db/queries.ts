@@ -2,18 +2,29 @@
 
 import { db } from './db';
 import * as schema from './schema';
-import { eq } from 'drizzle-orm';
+import { eq, sql, and } from 'drizzle-orm';
 
 // Function to create a new user
-export async function createUser(username: string) {
+export async function createUser(username: string | null, clerkId: string) {
   const insertedUser = await db
     .insert(schema.user)
     .values({
+      clerkId,
       username,
     })
     .returning();
 
   return insertedUser;
+}
+
+export async function getUserByClerkId(clerkId: string) {
+  const dbUser = await db
+    .select()
+    .from(schema.user)
+    .where(eq(schema.user.clerkId, clerkId))
+    .execute();
+
+  return dbUser;
 }
 
 export async function getOrganisations() {
@@ -34,7 +45,7 @@ export async function createOrganisation({
   const inputValue = {
     name: organisation.organisationName,
     description: organisation.organisationDescription,
-    organisationImageUrl: organisation.organisationImageUrl,
+    imageUrl: organisation.organisationImageUrl,
   };
   const insertedOrganisation = await db
     .insert(schema.organisation)
@@ -50,6 +61,26 @@ export async function getCollections() {
   return collections;
 }
 
+export async function getCollectionsFromOrg(org_id: number) {
+  const collections = await db
+    .select()
+    .from(schema.collection)
+    .where(eq(schema.collection.organisationId, org_id))
+    .execute();
+
+  return collections;
+}
+
+export async function getItemsFromCollection(collection_id: number) {
+  const items = await db
+    .select()
+    .from(schema.item)
+    .where(eq(schema.item.collectionId, collection_id))
+    .execute();
+
+  return items;
+}
+
 export async function createCollection({
   collection,
 }: {
@@ -57,7 +88,7 @@ export async function createCollection({
     name: string;
     organisationId: number;
     description: string;
-    collectionImageUrl: string;
+    imageUrl: string;
   };
 }) {
   const insertedCollection = await db
@@ -76,7 +107,7 @@ export async function createItem({
     collectionId: number;
     setNumber: number;
     description: string;
-    itemImageUrl: string;
+    imageUrl: string;
   };
 }) {
   const insertedItem = await db.insert(schema.item).values(item).returning();
@@ -104,5 +135,60 @@ export async function updateImage(imageId: number) {
 
 export async function getImages() {
   const images = await db.select().from(schema.image).execute();
+  return images;
+}
+
+export async function collectOrIncreaseItem(user_id: number, item_id: number) {
+  const existingPair = await db
+    .select()
+    .from(schema.userItem)
+    .where(
+      and(
+        eq(schema.userItem.userId, user_id),
+        eq(schema.userItem.itemId, item_id)
+      )
+    )
+    .execute();
+
+  if (existingPair.length > 0) {
+    const updatedPair = await db
+      .update(schema.userItem)
+      .set({ quantity: sql`${schema.userItem.quantity} + 1` })
+      .where(
+        and(
+          eq(schema.userItem.userId, user_id),
+          eq(schema.userItem.itemId, item_id)
+        )
+      )
+      .returning();
+
+    return updatedPair;
+  } else {
+    const insertedPair = await db
+      .insert(schema.userItem)
+      .values({ userId: user_id, itemId: item_id, quantity: 1 })
+      .returning();
+
+    return insertedPair;
+  }
+}
+
+export async function decreaseCollectedItem(user_id: number, item_id: number) {
+  const updatedPair = await db
+    .update(schema.userItem)
+    .set({ quantity: sql`GREATEST(${schema.userItem.quantity} - 1, 0)` })
+    .where(
+      and(
+        eq(schema.userItem.userId, user_id),
+        eq(schema.userItem.itemId, item_id)
+      )
+    )
+    .returning();
+
+  return updatedPair;
+}
+
+export async function getCollectionPairs() {
+  const images = await db.select().from(schema.userItem).execute();
   return images;
 }
