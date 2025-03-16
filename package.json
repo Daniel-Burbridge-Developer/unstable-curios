@@ -23,6 +23,7 @@
     "@tanstack/react-query-devtools": "^5.68.0",
     "@tanstack/react-query-next-experimental": "^5.68.0",
     "@uploadthing/react": "^7.3.0",
+    "@vercel/analytics": "^1.5.0",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
