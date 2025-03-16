@@ -194,12 +194,19 @@ const UserPage = () => {
             <Button onClick={() => decCollectedItem()}>lower count</Button>
             <Button onClick={() => incCollectedItem()}>increase count</Button>
             <div>
-              {collectionPairs.map((pair) => {
-                if (pair.itemId == selectedItem.id && pair.userId == user.id) {
-                  return <span key={pair.id}>{pair.quantity}</span>;
-                }
-                return null;
-              })}
+              {collectionPairs.some(
+                (pair) =>
+                  pair.itemId == selectedItem.id && pair.userId == user.id
+              )
+                ? collectionPairs.map((pair) => {
+                    if (
+                      pair.itemId == selectedItem.id &&
+                      pair.userId == user.id
+                    ) {
+                      return <span key={pair.id}>{pair.quantity}</span>;
+                    }
+                  })
+                : 0}
             </div>
           </div>
         )}
