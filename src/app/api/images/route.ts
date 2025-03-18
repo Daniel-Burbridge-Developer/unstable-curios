@@ -1,5 +1,4 @@
-// FAKE DATA SO IT BUILDS
-import { getOrganisations, createOrganisation } from "@/server/db/queries";
+import { getOrganisations, createOrganisation } from '@/server/db/queries';
 
 export async function GET() {
   const organisations = await getOrganisations();

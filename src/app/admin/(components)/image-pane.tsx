@@ -1,11 +1,9 @@
-import { fetchImages } from "@/lib/api/images";
-import { useQuery } from "@tanstack/react-query";
+import { fetchImages } from '@/lib/api/images';
+import createImageQueryOptions from '@/queryOptions/createImageQueryOptions';
+import { useQuery } from '@tanstack/react-query';
 
 const ImagePane = () => {
-  const { data } = useQuery({
-    queryKey: ["images"],
-    queryFn: fetchImages,
-  });
+  const { data } = useQuery(createImageQueryOptions());
   return (
     <div>
       <div></div>
