@@ -2,9 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { getImages } from '@/server/db/queries';
-import { UTUploadDropzone } from './ut-dropzone-uploader';
-import ItemCreationForm from './item-creation-form';
-import { Button } from './ui/button';
+import { UTUploadDropzone } from '../ut-dropzone-uploader';
+import ItemCreationForm from '../item-creation-form';
+import { Button } from '../ui/button';
 import CollectionCreationForm from './collection-creation-form';
 import OrganizationCreationForm from './organization-creation-form';
 

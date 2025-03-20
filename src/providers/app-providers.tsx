@@ -2,9 +2,9 @@
 import React from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ClerkProvider } from "@clerk/nextjs";
-import { ThemeProvider } from "@/components/theme-provider";
-import { Providers as TanstackProviders } from "@/app/providers/tanstack-query-provider";
-import { AppStoreProvider } from "@/app/providers/app-store-provider";
+import { ThemeProvider } from "@/providers/theme-provider";
+import { Providers as TanstackProviders } from "@/providers/tanstack-query-provider";
+import { AppStoreProvider } from "@/providers/app-store-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 
