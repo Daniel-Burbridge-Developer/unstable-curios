@@ -1,10 +1,17 @@
 import { queryOptions } from '@tanstack/react-query';
-import { fetchImages } from '@/lib/api/images';
+import { getImages, getImageById } from '@/actions/get-images';
 
-export default function createImageQueryOptions() {
+export function createImageQueryOptions() {
   return queryOptions({
     queryKey: ['images'],
-    queryFn: fetchImages,
+    queryFn: getImages,
+  });
+}
+
+export function createSingleImageQueryOptions(id: number) {
+  return queryOptions({
+    queryKey: ['items', id],
+    queryFn: () => getImageById(id),
   });
 }
 
