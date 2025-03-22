@@ -1,19 +1,19 @@
 import { queryOptions } from '@tanstack/react-query';
 import {
   getSubcollections,
-  getSubcollectionById,
+  getSubcollectionsFromCollection,
 } from '@/actions/get-subcollections';
 
-export function createsubCollectionQueryOptions() {
+export function createSubcollectionQueryOptions() {
   return queryOptions({
     queryKey: ['subcollections'],
     queryFn: getSubcollections,
   });
 }
 
-export function createSingleSubcollectionQueryOptions(id: number) {
+export function createSubcollectionFromCollectionQueryOptions(id: number) {
   return queryOptions({
     queryKey: ['subcollections', id],
-    queryFn: () => getSubcollectionById(id),
+    queryFn: () => getSubcollectionsFromCollection(id),
   });
 }

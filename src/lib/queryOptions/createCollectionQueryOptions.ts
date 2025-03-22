@@ -11,7 +11,7 @@ export function createCollectionQueryOptions() {
   });
 }
 
-export function createSingleCollectionQueryOptions(id: number) {
+export function createCollectionFromOrgQueryOptions(id: number) {
   return queryOptions({
     queryKey: ['collections', id],
     queryFn: () => getCollectionsFromOrg(id),
