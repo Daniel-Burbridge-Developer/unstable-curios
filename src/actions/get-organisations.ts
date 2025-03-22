@@ -1,8 +1,6 @@
-import { organisation } from '@/server/db/schema';
+import { DBOrganisation } from '@/types/database-types';
 
-type Organisation = typeof organisation.$inferSelect;
-
-export const getOrganisations = async (): Promise<Organisation[]> => {
+export const getOrganisations = async (): Promise<DBOrganisation[]> => {
   const response = await fetch('/api/organisations');
   if (!response.ok) {
     throw new Error('Failed to fetch organisations');
@@ -12,7 +10,7 @@ export const getOrganisations = async (): Promise<Organisation[]> => {
 
 export const getOrganisationById = async (
   id: number
-): Promise<Organisation> => {
+): Promise<DBOrganisation> => {
   const response = await fetch(`/api/organisations/${id}`);
   if (!response.ok) {
     throw new Error('Failed to fetch organisations');

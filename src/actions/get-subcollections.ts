@@ -1,8 +1,6 @@
-import { subcollection } from '@/server/db/schema';
+import { DBSubcollection } from '@/types/database-types';
 
-type Subcollection = typeof subcollection.$inferSelect;
-
-export const getSubcollections = async (): Promise<Subcollection[]> => {
+export const getSubcollections = async (): Promise<DBSubcollection[]> => {
   const response = await fetch('/api/subcollections');
   if (!response.ok) {
     throw new Error('Failed to fetch subcollections');
@@ -12,7 +10,7 @@ export const getSubcollections = async (): Promise<Subcollection[]> => {
 
 export const getSubcollectionById = async (
   id: number
-): Promise<Subcollection> => {
+): Promise<DBSubcollection> => {
   const response = await fetch(`/api/subcollections/${id}`);
   if (!response.ok) {
     throw new Error('Failed to fetch subcollections');

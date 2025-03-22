@@ -1,8 +1,6 @@
-import { item } from '@/server/db/schema';
+import { DBItem } from '@/types/database-types';
 
-type Item = typeof item.$inferSelect;
-
-export const getItems = async (): Promise<Item[]> => {
+export const getItems = async (): Promise<DBItem[]> => {
   const response = await fetch('/api/items');
   if (!response.ok) {
     throw new Error('Failed to fetch items');
@@ -10,7 +8,7 @@ export const getItems = async (): Promise<Item[]> => {
   return response.json();
 };
 
-export const getItemById = async (id: number): Promise<Item> => {
+export const getItemById = async (id: number): Promise<DBItem> => {
   const response = await fetch(`/api/items/${id}`);
   if (!response.ok) {
     throw new Error('Failed to fetch items');
