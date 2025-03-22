@@ -1,19 +1,14 @@
 import { DBSubcollection } from '@/types/database-types';
+import { getSubcollections as fetchSubcollections } from '@/server/db/queries/product-queries';
+import { getSubcollectionsFromCollection as fetchSubcollectionsFromCollection } from '@/server/db/queries/product-queries';
 
 export const getSubcollections = async (): Promise<DBSubcollection[]> => {
-  const response = await fetch('/api/subcollections');
-  if (!response.ok) {
-    throw new Error('Failed to fetch subcollections');
-  }
-  return response.json();
+  return await fetchSubcollections();
 };
 
-export const getSubcollectionById = async (
+export const getSubcollectionsFromCollection = async (
   id: number
-): Promise<DBSubcollection> => {
-  const response = await fetch(`/api/subcollections/${id}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch subcollections');
-  }
-  return response.json();
+): Promise<DBSubcollection[]> => {
+  const subcollections = await fetchSubcollectionsFromCollection(id);
+  return subcollections;
 };

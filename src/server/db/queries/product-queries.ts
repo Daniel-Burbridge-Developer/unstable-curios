@@ -67,7 +67,48 @@ export async function createCollection({
   return insertedCollection;
 }
 
+//subcollections
+
+export async function getSubcollections() {
+  const subcollections = await db.select().from(schema.subcollection).execute();
+
+  return subcollections;
+}
+
+export async function getSubcollectionsFromCollection(collection_id: number) {
+  const subcollections = await db
+    .select()
+    .from(schema.subcollection)
+    .where(eq(schema.subcollection.collectionId, collection_id))
+    .execute();
+
+  return subcollections;
+}
+
+export async function createSubcollection({
+  subcollection,
+}: {
+  subcollection: {
+    name: string;
+    collectionId: number;
+    description: string;
+    imageUrl: string;
+  };
+}) {
+  const insertedSubcollection = await db
+    .insert(schema.subcollection)
+    .values(subcollection)
+    .returning();
+
+  return insertedSubcollection;
+}
+
 //items
+
+export async function getItems() {
+  const items = await db.select().from(schema.item).execute();
+  return items;
+}
 
 export async function getItemsFromSubcollection(collection_id: number) {
   const items = await db

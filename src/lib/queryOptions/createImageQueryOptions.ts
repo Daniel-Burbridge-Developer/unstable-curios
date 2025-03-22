@@ -10,7 +10,7 @@ export function createImageQueryOptions() {
 
 export function createSingleImageQueryOptions(id: number) {
   return queryOptions({
-    queryKey: ['items', id],
+    queryKey: ['images', id],
     queryFn: () => getImageById(id),
   });
 }
