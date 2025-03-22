@@ -14,12 +14,3 @@ export function createSingleImageQueryOptions(id: number) {
     queryFn: () => getImageById(id),
   });
 }
-
-// EXAMPLE FOR SPECIFIC ENTRY
-// const [id, setId] = useState(1);
-// export default function createImageQueryOptions() {
-//   return queryOptions({
-//     queryKey: ['images', id],
-//     queryFn: () => fetchImages(id),
-//   });
-// }

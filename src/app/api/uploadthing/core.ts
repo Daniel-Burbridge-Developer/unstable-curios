@@ -1,6 +1,6 @@
 import { createUploadthing, type FileRouter } from 'uploadthing/next';
 import { UploadThingError } from 'uploadthing/server';
-import { createImage } from '@/server/db/queries';
+import { createImage } from '@/server/db/queries/product-queries';
 
 const f = createUploadthing();
 

@@ -1,4 +1,3 @@
-// REPLACE TYPE WITH ZOD
 import { image } from '@/server/db/schema';
 
 export const getImages = async (): Promise<(typeof image)[]> => {

@@ -1,31 +1,8 @@
-'use server';
-
-import { db } from './db';
-import * as schema from './schema';
+import { db } from '@/server/db/db';
+import * as schema from '@/server/db/schema';
 import { eq, sql, and } from 'drizzle-orm';
 
-// Function to create a new user
-export async function createUser(username: string | null, clerkId: string) {
-  const insertedUser = await db
-    .insert(schema.user)
-    .values({
-      clerkId,
-      username,
-    })
-    .returning();
-
-  return insertedUser;
-}
-
-export async function getUserByClerkId(clerkId: string) {
-  const dbUser = await db
-    .select()
-    .from(schema.user)
-    .where(eq(schema.user.clerkId, clerkId))
-    .execute();
-
-  return dbUser;
-}
+// organisations
 
 export async function getOrganisations() {
   const organisations = await db.select().from(schema.organisation).execute();
@@ -55,6 +32,7 @@ export async function createOrganisation({
   return insertedOrganisation;
 }
 
+// collections
 export async function getCollections() {
   const collections = await db.select().from(schema.collection).execute();
 
@@ -69,16 +47,6 @@ export async function getCollectionsFromOrg(org_id: number) {
     .execute();
 
   return collections;
-}
-
-export async function getItemsFromSubcollection(collection_id: number) {
-  const items = await db
-    .select()
-    .from(schema.item)
-    .where(eq(schema.item.subcollectionId, collection_id))
-    .execute();
-
-  return items;
 }
 
 export async function createCollection({
@@ -99,6 +67,18 @@ export async function createCollection({
   return insertedCollection;
 }
 
+//items
+
+export async function getItemsFromSubcollection(collection_id: number) {
+  const items = await db
+    .select()
+    .from(schema.item)
+    .where(eq(schema.item.subcollectionId, collection_id))
+    .execute();
+
+  return items;
+}
+
 export async function createItem({
   item,
 }: {
@@ -112,30 +92,6 @@ export async function createItem({
 }) {
   const insertedItem = await db.insert(schema.item).values(item).returning();
   return insertedItem;
-}
-
-export async function createImage({
-  image,
-}: {
-  image: { name: string; url: string; status: string };
-}) {
-  const insertedImage = await db.insert(schema.image).values(image).returning();
-  return insertedImage;
-}
-
-export async function updateImage(imageId: number) {
-  const updatedImage = await db
-    .update(schema.image)
-    .set({ status: 'assigned to organisation' })
-    .where(eq(schema.image.id, imageId))
-    .returning();
-
-  return updatedImage;
-}
-
-export async function getImages() {
-  const images = await db.select().from(schema.image).execute();
-  return images;
 }
 
 export async function collectOrIncreaseItem(user_id: number, item_id: number) {
@@ -188,7 +144,28 @@ export async function decreaseCollectedItem(user_id: number, item_id: number) {
   return updatedPair;
 }
 
-export async function getCollectionPairs() {
-  const images = await db.select().from(schema.userItem).execute();
+// images
+
+export async function createImage({
+  image,
+}: {
+  image: { name: string; url: string; status: string };
+}) {
+  const insertedImage = await db.insert(schema.image).values(image).returning();
+  return insertedImage;
+}
+
+export async function updateImage(imageId: number) {
+  const updatedImage = await db
+    .update(schema.image)
+    .set({ status: 'assigned to organisation' })
+    .where(eq(schema.image.id, imageId))
+    .returning();
+
+  return updatedImage;
+}
+
+export async function getImages() {
+  const images = await db.select().from(schema.image).execute();
   return images;
 }
