@@ -1,6 +1,8 @@
 import { organisation } from '@/server/db/schema';
 
-export const getOrganisations = async (): Promise<(typeof organisation)[]> => {
+type Organisation = typeof organisation.$inferSelect;
+
+export const getOrganisations = async (): Promise<Organisation[]> => {
   const response = await fetch('/api/organisations');
   if (!response.ok) {
     throw new Error('Failed to fetch organisations');
@@ -10,7 +12,7 @@ export const getOrganisations = async (): Promise<(typeof organisation)[]> => {
 
 export const getOrganisationById = async (
   id: number
-): Promise<typeof organisation> => {
+): Promise<Organisation> => {
   const response = await fetch(`/api/organisations/${id}`);
   if (!response.ok) {
     throw new Error('Failed to fetch organisations');

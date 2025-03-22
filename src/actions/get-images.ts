@@ -1,17 +1,17 @@
-import { image } from '@/server/db/schema';
+import { image as imageTable } from '@/server/db/schema';
+import { getImages as fetchImages } from '@/server/db/queries/product-queries';
 
-export const getImages = async (): Promise<(typeof image)[]> => {
-  const response = await fetch('/api/images');
-  if (!response.ok) {
-    throw new Error('Failed to fetch images');
-  }
-  return response.json();
+type Image = typeof imageTable.$inferSelect;
+
+export const getImages = async (): Promise<Image[]> => {
+  return await fetchImages();
 };
 
-export const getImageById = async (id: number): Promise<typeof image> => {
-  const response = await fetch(`/api/images/${id}`);
-  if (!response.ok) {
-    throw new Error('Failed to fetch images');
+export const getImageById = async (id: number): Promise<Image> => {
+  const images = await fetchImages();
+  const image = images.find((img) => img.id === id);
+  if (!image) {
+    throw new Error('Image not found');
   }
-  return response.json();
+  return image;
 };

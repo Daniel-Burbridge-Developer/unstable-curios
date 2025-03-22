@@ -1,6 +1,8 @@
-import { collection } from '@/server/db/schema';
+import { collection as collectionTable } from '@/server/db/schema';
 
-export const getCollections = async (): Promise<(typeof collection)[]> => {
+type Collection = typeof collectionTable.$inferSelect;
+
+export const getCollections = async (): Promise<Collection[]> => {
   const response = await fetch('/api/collections');
   if (!response.ok) {
     throw new Error('Failed to fetch collections');
@@ -8,9 +10,7 @@ export const getCollections = async (): Promise<(typeof collection)[]> => {
   return response.json();
 };
 
-export const getCollectionById = async (
-  id: number
-): Promise<typeof collection> => {
+export const getCollectionById = async (id: number): Promise<Collection> => {
   const response = await fetch(`/api/collections/${id}`);
   if (!response.ok) {
     throw new Error('Failed to fetch collections');

@@ -6,6 +6,8 @@ import {
   varchar,
 } from 'drizzle-orm/pg-core';
 
+import { createSelectSchema } from 'drizzle-zod';
+
 /**
  * This is an example of how to use the multi-project schema feature of Drizzle ORM. Use the same
  * database instance for multiple projects.
@@ -26,6 +28,8 @@ export const organisation = createTable('organisation', {
     () => new Date()
   ),
 });
+
+const organisationSelectSchema = createSelectSchema(organisation);
 
 export const collection = createTable('collection', {
   id: integer('id').primaryKey().generatedByDefaultAsIdentity(),
