@@ -1,3 +1,5 @@
+'use client';
+
 import { useImages } from '@/hooks/useImages';
 import { DBImage } from '@/types/database-types';
 

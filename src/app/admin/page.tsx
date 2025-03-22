@@ -1,5 +1,3 @@
-'use client';
-
 // import AdminDashboard from "@/components/admin/admin-dashboard";
 import AdminDashboard from './(components)/dashboard';
 
